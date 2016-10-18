@@ -53,7 +53,7 @@ public class FriendsListPanel extends JPanel {
 	private Robot clickRobot ;
 	private RoundedImageMaker imageMaker = new RoundedImageMaker();
 	private ChattingClient client;
-	
+	private FriendSelectionListener selectionListener = new FriendSelectionListener();
 	private String loginID;
 	private ArrayList<UserVO> alFriendsList;
 	private Map<String, UserVO> mapFriends;
@@ -81,6 +81,7 @@ public class FriendsListPanel extends JPanel {
 		} else {
 			jlFriendsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		}
+		jlFriendsList.removeMouseListener(selectionListener);
 		jlFriendsList.addMouseListener(new FriendMultiSelectionListener());
 	}
 	
@@ -105,7 +106,7 @@ public class FriendsListPanel extends JPanel {
 		// JList 모양 변경
 		jlFriendsList.setCellRenderer(new FriendsListCellRenderer());
 		jlFriendsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		jlFriendsList.addMouseListener(new FriendSelectionListener());
+		jlFriendsList.addMouseListener(selectionListener);
 		
 		scrollPane = new CustomJScrollPane(jlFriendsList);
 		scrollPane.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 0, new Color(230, 230, 230)));

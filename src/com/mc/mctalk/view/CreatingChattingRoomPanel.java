@@ -103,7 +103,7 @@ public class CreatingChattingRoomPanel extends JFrame {
 		selectedList = new JList<>(listmodel);
 		selectedList.setCellRenderer(new FriendsListCellRenderer());
 		ChoiceFriendListScrollPanel = new CustomJScrollPane(selectedList, CustomJScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				CustomJScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+				CustomJScrollPane.HORIZONTAL_SCROLLBAR_NEVER, true);
 		ChoiceFriendListScrollPanel.setBorder(null);
 		ChoiceFriendListScrollPanel.setPreferredSize(new Dimension(220, 200));
 		middlePanel.add(ChoiceFriendListScrollPanel);
@@ -145,9 +145,16 @@ public class CreatingChattingRoomPanel extends JFrame {
 
 				Thread chatCreat = new Thread(new Runnable() {
 					public void run() {
-						ChattingController makeRoom = new ChattingController(client, lastSelected);// 다중
-																									// 채팅컨트롤러손봐야
-																									// 함.
+						if (lastSelected.size() == 1) {
+							Iterator<Entry<String, UserVO>> entry = friendListPannel.getSelectedFriends().entrySet()
+									.iterator();
+							ChattingController make1on1Romm = new ChattingController(client, entry.next().getValue());
+						} else {
+							ChattingController makeRoom = new ChattingController(client, lastSelected);// 다중
+
+						}
+						// 채팅컨트롤러손봐야
+						// 함.
 					}
 				});
 				chatCreat.start();
