@@ -167,7 +167,6 @@ public class UserDAO {
 			System.out.println("login e : " + e);
 		} finally {
 			JDBCUtil.close(stmt, conn);
-			getAllFriendsMap(loginId);
 		}
 		return rst;
 	} 

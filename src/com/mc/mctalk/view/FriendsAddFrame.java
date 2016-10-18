@@ -253,74 +253,74 @@ public class FriendsAddFrame extends JFrame {
 			System.out.println("loginID : " + client.getLoginUserVO().getUserID());
 			System.out.println("addID : " + userId);
 			udo.AddFriend(client.getLoginUserVO().getUserID(), userId);
+			new FriendsListPanel(client);
 			
 			listModel.removeElementAt(searchList.getSelectedIndex());
-			new FriendsListPanel(client);
 		}
 	}
 	
 	//JList 모양 변경
-		class FriendsListCellRenderer extends JPanel implements ListCellRenderer<UserVO> {
-			private JLabel lbImgIcon = new JLabel();
-			private JLabel lbName = new JLabel();
-			private JLabel lbStatMsg = new JLabel();
-			private JPanel panelText;
+	class FriendsListCellRenderer extends JPanel implements ListCellRenderer<UserVO> {
+		private JLabel lbImgIcon = new JLabel();
+		private JLabel lbName = new JLabel();
+		private JLabel lbStatMsg = new JLabel();
+		private JPanel panelText;
+		
+		public FriendsListCellRenderer() {
+			Border border = this.getBorder();
+			Border margin = new EmptyBorder(5, 15, 5, 10);
+			this.setLayout(new BorderLayout(10, 10)); //간격 조정이 되버림(확인필요)
+			this.setBorder(new CompoundBorder(border, margin));
 			
-			public FriendsListCellRenderer() {
-				Border border = this.getBorder();
-				Border margin = new EmptyBorder(5, 15, 5, 10);
-				this.setLayout(new BorderLayout(10, 10)); //간격 조정이 되버림(확인필요)
-				this.setBorder(new CompoundBorder(border, margin));
-				
-				lbName.setFont(new Font("Malgun Gothic", Font.BOLD, 13));
-				lbStatMsg.setFont(new Font("Malgun Gothic", Font.PLAIN, 10));
-				lbStatMsg.setBorder(new EmptyBorder(0, 10, 0, 10));
-				
-				panelText = new JPanel(new GridLayout(0, 1));
-				panelText.setBorder(new EmptyBorder(15, 10, 15, 0));
-				panelText.add(lbName);
-				panelText.add(lbStatMsg);
+			lbName.setFont(new Font("Malgun Gothic", Font.BOLD, 13));
+			lbStatMsg.setFont(new Font("Malgun Gothic", Font.PLAIN, 10));
+			lbStatMsg.setBorder(new EmptyBorder(0, 10, 0, 10));
+			
+			panelText = new JPanel(new GridLayout(0, 1));
+			panelText.setBorder(new EmptyBorder(15, 10, 15, 0));
+			panelText.add(lbName);
+			panelText.add(lbStatMsg);
 
-				add(lbImgIcon, BorderLayout.WEST);
-				add(panelText, BorderLayout.CENTER);
+			add(lbImgIcon, BorderLayout.WEST);
+			add(panelText, BorderLayout.CENTER);
+		}
+		
+		@Override
+		public Component getListCellRendererComponent(JList<? extends UserVO> list, UserVO value, int index,
+				boolean isSelected, boolean cellHasFocus) {
+			//받아온 JList의 값을 UserVO 객체에 담기
+			UserVO vo = (UserVO) value;
+			
+			//리턴할 객체에 둥근 프로필 이미지, 이름과, 상태 메세지 세팅
+			ImageIcon profileImage = imageMaker.getRoundedImage(vo.getUserImgPath(), 70, 70);
+			lbImgIcon.setIcon(profileImage);
+			lbName.setText(vo.getUserName());
+			if(vo.getUserMsg() != null ){
+				lbStatMsg.setText(vo.getUserMsg());
 			}
 			
-			@Override
-			public Component getListCellRendererComponent(JList<? extends UserVO> list, UserVO value, int index,
-					boolean isSelected, boolean cellHasFocus) {
-				//받아온 JList의 값을 UserVO 객체에 담기
-				UserVO vo = (UserVO) value;
-				
-				//리턴할 객체에 둥근 프로필 이미지, 이름과, 상태 메세지 세팅
-				ImageIcon profileImage = imageMaker.getRoundedImage(vo.getUserImgPath(), 70, 70);
-				lbImgIcon.setIcon(profileImage);
-				lbName.setText(vo.getUserName());
-				if(vo.getUserMsg() != null ){
-					lbStatMsg.setText(vo.getUserMsg());
-				}
-				
-				//투명도 설정
-				lbImgIcon.setOpaque(true);
-			    lbName.setOpaque(true);
-			    lbStatMsg.setOpaque(true);
-				panelText.setOpaque(true);
-				
-			    // 선택됐을때 색상 변경
-			    if (isSelected) {
-			    	lbImgIcon.setBackground(list.getSelectionBackground());
-			        lbName.setBackground(list.getSelectionBackground());
-			        lbStatMsg.setBackground(list.getSelectionBackground());
-			        panelText.setBackground(list.getSelectionBackground());
-			        setBackground(list.getSelectionBackground());
-			    } else { 
-			    	lbImgIcon.setBackground(list.getBackground());
-			    	lbName.setBackground(list.getBackground());
-			    	lbStatMsg.setBackground(list.getBackground());
-			        panelText.setBackground(list.getBackground());
-			        setBackground(list.getBackground());
-			    }
-			    
-				return this;
-			}
+			//투명도 설정
+			lbImgIcon.setOpaque(true);
+		    lbName.setOpaque(true);
+		    lbStatMsg.setOpaque(true);
+			panelText.setOpaque(true);
+			
+		    // 선택됐을때 색상 변경
+		    if (isSelected) {
+		    	lbImgIcon.setBackground(list.getSelectionBackground());
+		        lbName.setBackground(list.getSelectionBackground());
+		        lbStatMsg.setBackground(list.getSelectionBackground());
+		        panelText.setBackground(list.getSelectionBackground());
+		        setBackground(list.getSelectionBackground());
+		    } else { 
+		    	lbImgIcon.setBackground(list.getBackground());
+		    	lbName.setBackground(list.getBackground());
+		    	lbStatMsg.setBackground(list.getBackground());
+		        panelText.setBackground(list.getBackground());
+		        setBackground(list.getBackground());
+		    }
+		    
+			return this;
 		}
+	}
 }
