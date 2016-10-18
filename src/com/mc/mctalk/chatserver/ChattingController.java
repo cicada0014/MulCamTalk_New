@@ -23,6 +23,9 @@ public class ChattingController {
 	ChattingClient client;
 	LinkedHashMap<String, UserVO> selectedFriends;
 
+	//채티창 오픈용 생성자
+	public ChattingController(){}
+	
 	//1:1 채팅방 개설용 생성자
 	public ChattingController(ChattingClient client, UserVO friendVO) {
 		this.client = client;
@@ -83,19 +86,15 @@ public class ChattingController {
 
 	public void openChattingRoom(String roomID) {
 		System.out.println(TAG + "openChattingRoom()");
-
-		try {
-			ChattingFrame openedChattingGUI = client.getHtChattingGUI(roomID);
-			// 채팅방 오픈 여부에 따른 분기 처리
-			if (openedChattingGUI == null) {
-				ChattingRoomVO roomVO = dao.getChatRoomVO(roomID);
-				ChattingFrame cf = new ChattingFrame(client, roomVO);
-			} else {
-				openedChattingGUI.requestFocus();
-				openedChattingGUI.setState(java.awt.Frame.NORMAL);
-			}
-		} catch (NullPointerException e) {
-			System.out.println("널포인트 익셉션 난고야? ");
+		ChattingFrame openedChattingGUI = client.getHtChattingGUI(roomID);
+		
+		// 채팅방 오픈 여부에 따른 분기 처리
+		if (openedChattingGUI == null) {
+			ChattingRoomVO roomVO = dao.getChatRoomVO(roomID);
+			ChattingFrame cf = new ChattingFrame(client, roomVO);
+		} else {
+			openedChattingGUI.requestFocus();
+			openedChattingGUI.setState(java.awt.Frame.NORMAL);
 		}
 	}
 }

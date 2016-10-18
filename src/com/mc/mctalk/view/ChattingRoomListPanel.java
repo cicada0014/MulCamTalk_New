@@ -122,8 +122,8 @@ public class ChattingRoomListPanel extends JPanel {
 			//getClickCount가 2 이상이면 더블클릭으로 판단함 && 선택된 인덱스가 -1이면 제대로된 선택이 아님
 			if(e.getClickCount() >= 2 && jlFriendsList.getSelectedIndex() != -1){
 				//선택된 친구ID와 로그인 ID를 매개변수로 컨트롤러 호출
-				UserVO vo = (UserVO)jlFriendsList.getSelectedValue();
-				new ChattingController(client, vo);
+				ChattingRoomVO vo = (ChattingRoomVO)jlFriendsList.getSelectedValue();
+				new ChattingController().openChattingRoom(vo.getChattingRoomID());
 			}
 		}
 		public void mouseReleased(MouseEvent arg0) {}

@@ -162,8 +162,6 @@ public class UserDAO {
 		return check;
 	}
 	
-	
-	
 	//친구 목록 불러오기
 	public Map<String, UserVO> getAllFriendsMap(String id){
 		System.out.println(TAG + "getAllFriendsMap()");
@@ -195,31 +193,5 @@ public class UserDAO {
 		}
 		return friendsMap;
 	}
-	
-//	public boolean doCheck(JoinVO vo){
-//		boolean result = true;
-//		//System.out.println("doCheck vo.getId() : " + vo.getId());
-//		Connection conn = null;
-//		PreparedStatement stmt = null;
-//		ResultSet rst = null;
-//		
-//		try{
-//			conn = JDBCUtil.getConnection();
-//			stmt = conn.prepareStatement(checkSQL);
-//			stmt.setString(1, vo.getId());
-//			rst = stmt.executeQuery();
-//			
-//			if(rst.next()){
-//				result = false;
-//			}
-//			
-//		}catch(SQLException e){
-//			System.out.println("login e : " + e);
-//		}finally {
-//			JDBCUtil.close(rst,stmt, conn);
-//		}
-//		return result;
-//	}
-	
 
 }
