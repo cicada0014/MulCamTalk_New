@@ -285,7 +285,7 @@ public class ChattingRoomDAO {
 		return roomVO;
 	}
 	
-	//방에 참여한 유저 정보 검색하기
+	//방에 참여한 유저ID 리스트
 	public ArrayList<String> getChattingRoomUserList(String roomID){
 //		System.out.println(TAG + "getUserListChattingRoom()");
 		

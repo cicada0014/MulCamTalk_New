@@ -24,7 +24,9 @@ public class ChattingController {
 	LinkedHashMap<String, UserVO> selectedFriends;
 
 	//채티창 오픈용 생성자
-	public ChattingController(){}
+	public ChattingController(ChattingClient client){
+		this.client = client;
+	}
 	
 	//1:1 채팅방 개설용 생성자
 	public ChattingController(ChattingClient client, UserVO friendVO) {
