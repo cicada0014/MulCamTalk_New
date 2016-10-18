@@ -23,6 +23,7 @@ public class ChattingController {
 	ChattingClient client;
 	LinkedHashMap<String, UserVO> selectedFriends;
 
+	//1:1 채팅방 개설용 생성자
 	public ChattingController(ChattingClient client, UserVO friendVO) {
 		this.client = client;
 		this.loginID = client.getLoginUserVO().getUserID();
@@ -31,10 +32,9 @@ public class ChattingController {
 		this.selectedFriends = new LinkedHashMap<String, UserVO>();
 		this.selectedFriends.put(friendID, friendVO);
 		hasChattingRoom();
-		//test
 	}
 
-	//다중선택시 오버로딩
+	//1:N 채팅방 개설용 생성자
 	public ChattingController(ChattingClient client, LinkedHashMap<String, UserVO> selectedFriends) {
 		this.client = client;
 		this.loginID = client.getLoginUserVO().getUserID();
