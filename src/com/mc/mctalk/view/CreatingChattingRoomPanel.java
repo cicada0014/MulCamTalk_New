@@ -253,5 +253,6 @@ public class CreatingChattingRoomPanel extends JFrame {
 	// 종료스레드 작성
 	public static void main(String[] args) {
 		CreatingChattingRoomPanel c = new CreatingChattingRoomPanel(null);
+		//test
 	}
 }
