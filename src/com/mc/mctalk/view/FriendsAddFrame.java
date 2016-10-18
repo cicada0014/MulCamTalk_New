@@ -230,7 +230,6 @@ public class FriendsAddFrame extends JFrame {
 
 			UserDAO udo = new UserDAO();
 			UserVO vo = new UserVO();
-			client = new ChattingClient(vo);
 			mapFriends = new LinkedHashMap<String, UserVO>();
 			mapFriends = udo.SearchMember(client.getLoginUserVO().getUserID(), nameField.getText().toString());
 			searchFriendsMap();
