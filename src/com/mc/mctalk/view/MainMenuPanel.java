@@ -170,7 +170,7 @@ public class MainMenuPanel extends JPanel {
 				FriendsAddFrame addFriend = new FriendsAddFrame();
 			}else{
 				//방 추가 프레임 연결 2016.10.7
-				CreatingChattingRoomPanel creatingChattingRoom = new CreatingChattingRoomPanel(client);
+				CreatingChattingRoomPanel creatingChattingRoom = new CreatingChattingRoomPanel(client, mainFrame);
 			}
 			System.out.println(selectedIndex);
 			

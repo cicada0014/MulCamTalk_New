@@ -60,9 +60,10 @@ public class CreatingChattingRoomPanel extends JFrame {
 	private Color selectedColor1 = new Color(64, 224, 208); // 아름다운 푸른색 찾아보기.
 	private Font grayFont = new Font("dialog", Font.BOLD, 12);
 	private ChattingClient client;
-
-	public CreatingChattingRoomPanel(ChattingClient client) {
+	private MainFrame mainFrame;
+	public CreatingChattingRoomPanel(ChattingClient client, MainFrame mainFrame) {
 		this.client = client;
+		this.mainFrame = mainFrame;
 		friendListPannel = new FriendsListPanel(true, client);
 		// frame setting
 		this.setBackground(backGraundColor);
@@ -152,7 +153,8 @@ public class CreatingChattingRoomPanel extends JFrame {
 						} else {
 							ChattingController makeRoom = new ChattingController(client, lastSelected);// 다중
 
-						}
+						}mainFrame.changePanel("chattingList");
+						
 						// 채팅컨트롤러손봐야
 						// 함.
 					}
@@ -255,11 +257,5 @@ public class CreatingChattingRoomPanel extends JFrame {
 
 			return this;
 		}
-	}
-
-	// 종료스레드 작성
-	public static void main(String[] args) {
-		CreatingChattingRoomPanel c = new CreatingChattingRoomPanel(null);
-		//test
 	}
 }
