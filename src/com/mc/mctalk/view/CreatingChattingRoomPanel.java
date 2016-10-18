@@ -145,9 +145,16 @@ public class CreatingChattingRoomPanel extends JFrame {
 
 				Thread chatCreat = new Thread(new Runnable() {
 					public void run() {
-						ChattingController makeRoom = new ChattingController(client, lastSelected);// 다중
-																									// 채팅컨트롤러손봐야
-																									// 함.
+						if (lastSelected.size() == 1) {
+							Iterator<Entry<String, UserVO>> entry = friendListPannel.getSelectedFriends().entrySet()
+									.iterator();
+							ChattingController make1on1Romm = new ChattingController(client, entry.next().getValue());
+						} else {
+							ChattingController makeRoom = new ChattingController(client, lastSelected);// 다중
+
+						}
+						// 채팅컨트롤러손봐야
+						// 함.
 					}
 				});
 				chatCreat.start();
@@ -253,5 +260,6 @@ public class CreatingChattingRoomPanel extends JFrame {
 	// 종료스레드 작성
 	public static void main(String[] args) {
 		CreatingChattingRoomPanel c = new CreatingChattingRoomPanel(null);
+		//test
 	}
 }
