@@ -123,7 +123,7 @@ public class ChattingRoomListPanel extends JPanel {
 			if(e.getClickCount() >= 2 && jlFriendsList.getSelectedIndex() != -1){
 				//선택된 친구ID와 로그인 ID를 매개변수로 컨트롤러 호출
 				ChattingRoomVO vo = (ChattingRoomVO)jlFriendsList.getSelectedValue();
-				new ChattingController(client).openChattingRoom(vo.getChattingRoomID());
+				new ChattingController(client).openChattingRoom(vo.getChattingRoomID());;
 			}
 		}
 		public void mouseReleased(MouseEvent arg0) {}
