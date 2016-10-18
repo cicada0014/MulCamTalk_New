@@ -103,7 +103,7 @@ public class CreatingChattingRoomPanel extends JFrame {
 		selectedList = new JList<>(listmodel);
 		selectedList.setCellRenderer(new FriendsListCellRenderer());
 		ChoiceFriendListScrollPanel = new CustomJScrollPane(selectedList, CustomJScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				CustomJScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+				CustomJScrollPane.HORIZONTAL_SCROLLBAR_NEVER, true);
 		ChoiceFriendListScrollPanel.setBorder(null);
 		ChoiceFriendListScrollPanel.setPreferredSize(new Dimension(220, 200));
 		middlePanel.add(ChoiceFriendListScrollPanel);

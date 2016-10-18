@@ -94,7 +94,7 @@ public class ChattingRoomListPanel extends JPanel {
 		jlFriendsList.setCellRenderer(new FriendsListCellRenderer());
 		jlFriendsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jlFriendsList.addMouseListener(new FriendSelectionListener());
-		scrollPane = new CustomJScrollPane(jlFriendsList,scrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,scrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane = new CustomJScrollPane(jlFriendsList,scrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,scrollPane.HORIZONTAL_SCROLLBAR_NEVER, true);
 		
 		scrollPane.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 0, new Color(230, 230, 230)));
 

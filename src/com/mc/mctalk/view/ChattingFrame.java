@@ -77,7 +77,7 @@ public class ChattingFrame extends JFrame {
 		pChatInput.setPreferredSize(new Dimension(380, 80));
 		
 		scrollChatHistory = new CustomJScrollPane(tpChatHistory, scrollChatHistory.VERTICAL_SCROLLBAR_AS_NEEDED,
-				scrollChatHistory.HORIZONTAL_SCROLLBAR_NEVER);
+				scrollChatHistory.HORIZONTAL_SCROLLBAR_NEVER, false);
 		scrollChatHistory.setPreferredSize(new Dimension(372, 455));
 		
 		tpChatHistory.setEditable(false); // 채팅 저장해놓을 패널에 채팅 불가

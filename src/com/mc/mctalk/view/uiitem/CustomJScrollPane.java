@@ -17,27 +17,32 @@ public class CustomJScrollPane extends JScrollPane {
 	}
 	public CustomJScrollPane(Component comp) {
 		super(comp);
-		JScrollBar sb = this.getVerticalScrollBar();
-		
-		//스크롤바 모양 설정 (굵기, 보더)
-		sb.setPreferredSize(new Dimension(15, 0));
-	    Border brd = BorderFactory.createMatteBorder(1, 3, 1, 3, scrollColorForList[0]);
-		sb.setBorder(brd);
-		
-		sb.setUI(new MyScrollbarUI(scrollColorForList));
+		initJScrollPane(true);
 	}
 	
-	public CustomJScrollPane(Component comp, int arg1, int arg2) {
+	public CustomJScrollPane(Component comp, int arg1, int arg2, boolean isForList) {
 		super(comp, arg1, arg2);
-		JScrollBar sb = this.getVerticalScrollBar();
-		
-		//스크롤바 모양 설정 (굵기, 보더)
-		sb.setPreferredSize(new Dimension(11, 0));
-		Border brd = BorderFactory.createMatteBorder(1, 1, 1, 1, scrollColorForChat[0]);
-	    sb.setBorder(brd);
-		
-		sb.setUI(new MyScrollbarUI(scrollColorForChat));
+		initJScrollPane(isForList);
 	}
+	
+	public void initJScrollPane(boolean isForList){
+		JScrollBar sb = this.getVerticalScrollBar();
+
+		if(isForList){
+			sb.setPreferredSize(new Dimension(15, 0));
+		    Border brd = BorderFactory.createMatteBorder(1, 3, 1, 3, scrollColorForList[0]);
+			sb.setBorder(brd);
+			
+			sb.setUI(new MyScrollbarUI(scrollColorForList));
+		}else{
+			sb.setPreferredSize(new Dimension(11, 0));
+			Border brd = BorderFactory.createMatteBorder(1, 1, 1, 1, scrollColorForChat[0]);
+		    sb.setBorder(brd);
+			
+			sb.setUI(new MyScrollbarUI(scrollColorForChat));
+		}
+	}
+	
 	
 	static class MyScrollbarUI extends MetalScrollBarUI {
 
