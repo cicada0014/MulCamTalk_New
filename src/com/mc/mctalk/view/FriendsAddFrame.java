@@ -253,7 +253,10 @@ public class FriendsAddFrame extends JFrame {
 			System.out.println("loginID : " + client.getLoginUserVO().getUserID());
 			System.out.println("addID : " + userId);
 			udo.AddFriend(client.getLoginUserVO().getUserID(), userId);
-			new FriendsListPanel(client);
+			
+			MainFrame mf = new MainFrame(client);
+			mf.changePanel("friendsList");
+			mf.repaint();
 			
 			listModel.removeElementAt(searchList.getSelectedIndex());
 		}
