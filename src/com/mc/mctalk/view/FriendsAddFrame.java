@@ -174,7 +174,6 @@ public class FriendsAddFrame extends JFrame {
 			}
 		}
 		count = listModel.getSize();
-//		System.out.println(listModel);
 	}
 	
 	public void setNameField(JTextField nameField)
