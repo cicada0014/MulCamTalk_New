@@ -362,4 +362,39 @@ public class ChattingRoomDAO {
 		}
 		return MessageVOMap;
 	}
+	
+	public ArrayList<MessageVO> getChatRoomMessageArray(String roomID){
+		System.out.println(TAG + "getChatRoomMessages()");
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		ArrayList<MessageVO> MessageVOArray = new ArrayList<MessageVO>();
+
+		try{
+			conn = JDBCUtil.getConnection();
+			stmt = conn.prepareStatement(getChatRoomMessagesSQL);
+			stmt.setString(1, roomID);
+			rst = stmt.executeQuery();
+
+			while (rst.next()) {
+				MessageVO messageVO = new MessageVO(); 
+				ChattingRoomVO roomVO = new ChattingRoomVO(); 
+				roomVO.setChattingRoomID(rst.getString(1));
+				messageVO.setRoomVO(roomVO);
+				messageVO.setMessageID(rst.getString(2));
+				messageVO.setSendUserID(rst.getString(3));
+				messageVO.setSendUserName(rst.getString(4));
+				messageVO.setMessage(rst.getString(5));
+				messageVO.setSendTime(rst.getString(6));
+				MessageVOArray.add(messageVO);
+			}
+			
+		}catch(SQLException e){
+			System.out.println("addUserToChattingRoom e : " + e);
+		}finally {
+			JDBCUtil.close(rst,stmt, conn);
+		}
+		return MessageVOArray;
+	}
 }

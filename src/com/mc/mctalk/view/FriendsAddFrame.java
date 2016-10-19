@@ -8,8 +8,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,6 +23,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.border.*;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -32,7 +36,9 @@ import javax.swing.ListSelectionModel;
 import com.mc.mctalk.chatserver.ChattingClient;
 import com.mc.mctalk.dao.UserDAO;
 import com.mc.mctalk.view.uiitem.CustomJScrollPane;
+import com.mc.mctalk.view.uiitem.CustomTitlebar;
 import com.mc.mctalk.view.uiitem.RoundedImageMaker;
+import com.mc.mctalk.view.uiitem.SearchPanel;
 import com.mc.mctalk.vo.UserVO;
 
 /*
@@ -48,8 +54,6 @@ import com.mc.mctalk.vo.UserVO;
  */
 
 public class FriendsAddFrame extends JFrame {	
-	private JFrame f = new JFrame();
-	
 	private JPanel firstPanel = new JPanel(); //윗 패널
 	private JLabel addLabel = new JLabel("검색할 이름을 입력하시오.");
 	private JTextField nameField = new JTextField();
@@ -58,7 +62,7 @@ public class FriendsAddFrame extends JFrame {
 	private JPanel secondPanel = new JPanel(); //가운데 패널
 	private JList searchList = new JList(); //검색된 유저 리스트
 	private DefaultListModel listModel; //리스트 모델
-	private JScrollPane listScroll = new JScrollPane(); //리스트 스크롤
+	private CustomJScrollPane listScroll; //리스트 스크롤
 	
 	private JPanel thirdPanel = new JPanel(); //하단 패널
 	private JButton addBtn = new JButton("친구추가");
@@ -67,82 +71,57 @@ public class FriendsAddFrame extends JFrame {
 	private RoundedImageMaker imageMaker = new RoundedImageMaker();
 	private ChattingClient client;
 	
-	public FriendsAddFrame(){
-		initPanel();
-		
-		//상단 패널
-		firstPanel.add(addLabel);
-		firstPanel.add(nameField);
-		firstPanel.add(searchBtn);
-		nameField.setPreferredSize(new Dimension(270, 30));
-		searchBtn.addActionListener(new MemberSearchListener());
-		searchBtn.setPreferredSize(new Dimension(270, 30));
-		firstPanel.setPreferredSize(new Dimension(300, 100));
-		add(firstPanel, BorderLayout.NORTH);
-		
-		//가운데 패널에 넣을 검색 리스트, 스크롤 세팅
-		listScroll.setViewportView(searchList);
-		listScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		searchList.setCellRenderer(new FriendsListCellRenderer());
-		searchList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		searchList.setListData(searchUser);
-		
-		//가운데 패널
-		secondPanel.add(listScroll);
-//		secondPanel.setPreferredSize(new Dimension(300, 200));
-		listScroll.setViewportView(searchList);
-		listScroll.setPreferredSize(new Dimension(270, 150));
-		searchList.setPreferredSize(new Dimension(250, 150));
-		add(secondPanel, BorderLayout.CENTER);
-		
-		//하단 패널
-		thirdPanel.add(addBtn);
-		addBtn.setPreferredSize(new Dimension(270, 30));
-		addBtn.addActionListener(new MemberAddListener());
-		add(thirdPanel, BorderLayout.SOUTH);
-		
-		this.setTitle("친구 추가");
-		this.setSize(300, 360);
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setResizable(false);
-		this.setVisible(true);
-	}
+	private SearchPanel sPanel;
+	private CustomTitlebar title;
+	private MainFrame mainFrame;
 	
-	public FriendsAddFrame(ChattingClient client)
+	private int count = 0;
+	
+	public FriendsAddFrame(ChattingClient client, MainFrame mainFrame)
 	{
 		this.client = client;
+		this.mainFrame = mainFrame;
 		initPanel();
+		setLayout(null);
+		
+		this.setLocation(300, 500);
+		this.setUndecorated(true);
+		title = new CustomTitlebar(this, null);
+		title.setBounds(0, 0, 300, 36);
+		add(title);
 		
 		//상단 패널
 		firstPanel.add(addLabel);
 		firstPanel.add(nameField);
-		firstPanel.add(searchBtn);
+//		firstPanel.add(searchBtn);
 		nameField.setPreferredSize(new Dimension(270, 30));
-		searchBtn.addActionListener(new MemberSearchListener());
-		searchBtn.setPreferredSize(new Dimension(270, 30));
-		firstPanel.setPreferredSize(new Dimension(300, 100));
-		add(firstPanel, BorderLayout.NORTH);
+//		searchBtn.addActionListener(new MemberSearchListener());
+//		searchBtn.setPreferredSize(new Dimension(270, 30));
+//		firstPanel.setPreferredSize(new Dimension(300, 100));
+		add(firstPanel);
+		firstPanel.setBounds(0, 40, 300, 60);
 		
 		//가운데 패널에 넣을 검색 리스트, 스크롤 세팅
 		listScroll.setViewportView(searchList);
 		listScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		searchList.setCellRenderer(new FriendsListCellRenderer());
 		searchList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		searchList.setListData(searchUser);
 		
 		//가운데 패널
 		secondPanel.add(listScroll);
-//		secondPanel.setPreferredSize(new Dimension(300, 200));
+//		secondPanel.setPreferredSize(new Dimension(300, 150));
 		listScroll.setViewportView(searchList);
-		listScroll.setPreferredSize(new Dimension(270, 150));
-		searchList.setPreferredSize(new Dimension(250, 150));
-		add(secondPanel, BorderLayout.CENTER);
+//		listScroll.setPreferredSize(new Dimension(270, 200));
+		searchList.setPreferredSize(new Dimension(250, 600));
+		add(secondPanel);
+		secondPanel.setBounds(0, 100, 300, 200);
 		
 		//하단 패널
 		thirdPanel.add(addBtn);
 		addBtn.setPreferredSize(new Dimension(270, 30));
 		addBtn.addActionListener(new MemberAddListener());
-		add(thirdPanel, BorderLayout.SOUTH);
+		add(thirdPanel);
+		thirdPanel.setBounds(0, 300, 300, 50);
 		
 		this.setTitle("친구 추가");
 		this.setSize(300, 360);
@@ -152,7 +131,10 @@ public class FriendsAddFrame extends JFrame {
 	}
 	
 	public void initPanel(){
-		this.setLayout(new BorderLayout());
+//		this.setLayout(new BorderLayout());
+		sPanel = new SearchPanel();
+		nameField = sPanel.getTfSearch();
+		nameField.addKeyListener(new MemberSearchListener());
 		
 		// JList에 데이터 담기
 		searchList = new JList(new DefaultListModel());
@@ -191,7 +173,7 @@ public class FriendsAddFrame extends JFrame {
 				}
 			}
 		}
-		System.out.println(listModel);
+		count = listModel.getSize();
 	}
 	
 	public void setNameField(JTextField nameField)
@@ -221,20 +203,54 @@ public class FriendsAddFrame extends JFrame {
 		return mapFriends;
 	}
 	
-	//버튼 이벤트
-	class MemberSearchListener implements ActionListener {
+	public void searchEvent()
+	{
+		UserDAO udo = new UserDAO();
+		UserVO vo = new UserVO();
+		mapFriends = new LinkedHashMap<String, UserVO>();
+		mapFriends = udo.SearchMember(client.getLoginUserVO().getUserID(), nameField.getText().toString());
+		searchFriendsMap();
+		addElementToJList();
+		System.out.println(listModel);
+	}
+	
+	class MemberSearchListener implements KeyListener
+	{
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void keyPressed(KeyEvent e) {
 			// TODO Auto-generated method stub
+			int key = e.getKeyCode();
+			switch(key)
+			{
+				case KeyEvent.VK_ENTER:
+					searchEvent();
+					
+			}
+		}
 
-			UserDAO udo = new UserDAO();
-			UserVO vo = new UserVO();
-			mapFriends = new LinkedHashMap<String, UserVO>();
-			mapFriends = udo.SearchMember(client.getLoginUserVO().getUserID(), nameField.getText().toString());
-			searchFriendsMap();
-			addElementToJList();
-			System.out.println(listModel);
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			int key = e.getKeyCode();
+			switch(key)
+			{
+				case KeyEvent.VK_ENTER:
+					searchEvent();
+					
+			}
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			int key = e.getKeyCode();
+			switch(key)
+			{
+				case KeyEvent.VK_ENTER:
+					searchEvent();
+					
+			}
 		}
 		
 	}
@@ -254,11 +270,8 @@ public class FriendsAddFrame extends JFrame {
 			System.out.println("addID : " + userId);
 			udo.AddFriend(client.getLoginUserVO().getUserID(), userId);
 			
-			MainFrame mf = new MainFrame(client);
-			mf.changePanel("friendsList");
-			mf.repaint();
-			
 			listModel.removeElementAt(searchList.getSelectedIndex());
+			mainFrame.changePanel("friendsList");
 		}
 	}
 	
