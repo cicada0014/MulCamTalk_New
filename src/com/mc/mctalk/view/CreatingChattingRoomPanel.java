@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
@@ -26,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -103,6 +105,24 @@ public class CreatingChattingRoomPanel extends JFrame {
 		// 크기 설정하려면 서치패널에 있는 크기를 필수적으로 줄여주어야 한다....
 		selectedList = new JList<>(listmodel);
 		selectedList.setCellRenderer(new FriendsListCellRenderer());
+		selectedList.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {
+			}
+			public void mousePressed(MouseEvent e) {
+			}
+			public void mouseExited(MouseEvent e) {
+			}
+			public void mouseEntered(MouseEvent e) {
+			}
+			public void mouseClicked(MouseEvent e) {
+				// 오른쪽 선택된 리스트 선택시 왼쪽 리스트 선택 해제. 
+				System.out.println(selectedList.getSelectedValue().getSelectedIndex());
+				friendListPannel.getJlFriendsList().getSelectionModel().removeSelectionInterval(
+						selectedList.getSelectedValue().getSelectedIndex(), selectedList.getSelectedValue().getSelectedIndex());
+				listmodel.remove(selectedList.getSelectedIndex());// 오른쪽 선택 값 삭제 
+				friendListPannel.getSelectedFriends().remove(selectedList.getSelectedValue());// 오른쪽 선택된 친구들의 값이 지워짐에 따라 왼쪽 선택값 삭
+			}
+		});
 		ChoiceFriendListScrollPanel = new CustomJScrollPane(selectedList, CustomJScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				CustomJScrollPane.HORIZONTAL_SCROLLBAR_NEVER, true);
 		ChoiceFriendListScrollPanel.setBorder(null);
@@ -254,7 +274,6 @@ public class CreatingChattingRoomPanel extends JFrame {
 				lbCloseBtn.setBackground(selectedColor1);
 				setBackground(backGraundColor);
 			}
-
 			return this;
 		}
 	}

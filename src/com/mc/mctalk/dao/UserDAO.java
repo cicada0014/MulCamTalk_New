@@ -27,7 +27,7 @@ public class UserDAO {
 			+"and user_id != ?"
 			+"and user_name like ? ";
 	private String idDuplicationCheckSQL = "SELECT user_id FROM users WHERE user_id=?";
-	
+	private int friendIndex=0 ;
 	
 	
 	// 회원가입
@@ -183,6 +183,8 @@ public class UserDAO {
 				vo.setUserName(rst.getString("user_name"));
 				vo.setUserImgPath(rst.getString("user_pf_img_path"));
 				vo.setUserMsg(rst.getString("user_msg"));
+				vo.setSelectedIndex(friendIndex);
+				friendIndex++;
 				friendsMap.put(vo.getUserID(), vo);
 			}
 //			System.out.println("searchFriend() : " + friendsList.size());

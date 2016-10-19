@@ -4,6 +4,14 @@ public class UserVO {
 	private String userID, userPassword, userName, userMsg, userBirth, 
 						userMail, userPhone, userAddress, userJoinDate, userImgPath;
 	private int userSex;
+	private int selectedIndex;
+	public int getSelectedIndex() {
+		return selectedIndex;
+	}
+
+	public void setSelectedIndex(int selectedIndex) {
+		this.selectedIndex = selectedIndex;
+	}
 
 	public UserVO(){		
 	}
