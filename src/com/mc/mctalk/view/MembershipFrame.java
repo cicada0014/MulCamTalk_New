@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -27,6 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import org.jdesktop.swingx.prompt.PromptSupport;
 import com.mc.mctalk.dao.UserDAO;
+import com.mc.mctalk.view.uiitem.CustomTitlebar;
 import com.mc.mctalk.vo.UserVO;
 
 /**
@@ -64,10 +66,10 @@ public class MembershipFrame extends JFrame {
 	private JButton join = new JButton("가입하기");
 	private JButton closebtn = new JButton("가입취소");
 	private Font grayFont = new Font("dialog", Font.BOLD, 12);
-	private Color backGroundColor = new Color(255, 255, 255);
+	private Color backGroundColor = new Color(82, 134, 198);
 	private Dimension fieldSize = new Dimension(215, 27);
 	private joinResult joincomplete = new joinResult();
-	private ImageIcon tokLogo = new ImageIcon("images/logo.png");
+	private ImageIcon tokLogo = new ImageIcon("images/membershipLogo.png");
 	private CheckPassword checkPassword = new CheckPassword();
 	private ActionCheckManSexBox checkManSex = new ActionCheckManSexBox();
 	private ActionCheckWomanSexBox checkWomanSex = new ActionCheckWomanSexBox();
@@ -85,10 +87,15 @@ public class MembershipFrame extends JFrame {
 	private JButton idDuplicationBtn = new JButton();
 	private boolean isIdDuplicationCheck = false;
 	private UserDAO userDao = new UserDAO();
-	private String 	duplicationCheckedId= null;
+	private String 	duplicationCheckedId= "";
+	private JPanel titlepanel = new JPanel();
+	private ImageIcon infoIcon = new ImageIcon("images/info.png");
+	private CustomTitlebar titleBar = new CustomTitlebar(this, null, false);
 	// 프레임 생성자
 	public MembershipFrame() {
 		// frame setting
+		this.setUndecorated(true);
+		panels.add(titlepanel);
 		panels.add(logoPanel);
 		panels.add(idPanel);
 		panels.add(passwordPanel);
@@ -107,10 +114,14 @@ public class MembershipFrame extends JFrame {
 			mainPanel.add(panel);
 			panel.setBackground(backGroundColor);
 		}
+		titlepanel.add(titleBar);
+		titleBar.setSize(new Dimension(380, 36));
+		titleBar.setPreferredSize(titleBar.getSize());
 		// logo panel setting(1 panel)
 		JLabel logoLabel = new JLabel();
 		logoPanel.add(logoLabel);
-		logoPanel.setSize(380, 220);
+		
+		logoPanel.setSize(380, 120);
 		logoPanel.setPreferredSize(logoPanel.getSize());
 		logoLabel.setIcon(tokLogo);
 		/// id panel setting(2 panel)
@@ -260,12 +271,14 @@ public class MembershipFrame extends JFrame {
 	class idDuplicationCheck implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if (idfield.getText().equals("")) {
-				NullWarning.showMessageDialog(idfield, "아이디를 입력하셔야죠 ^^;");
+				
+				NullWarning.showMessageDialog(idfield, "아이디를 입력하셔야죠 ^^;", "앗!", JOptionPane.NO_OPTION, infoIcon);
 			}
 			if(!userDao.idDuplicationCheckDao(idfield.getText())){
-				NullWarning.showMessageDialog(idfield, "이미 존재하는 아이디입니다.");
+				NullWarning.showMessageDialog(idfield, "이미 존재하는 아이디입니다.", "앗!", JOptionPane.NO_OPTION, infoIcon);
 				isIdDuplicationCheck = false;
 			}else{
+				NullWarning.showMessageDialog(idfield, "사용하실 수 있는 아이디입니다. ", "정보", JOptionPane.NO_OPTION, infoIcon);
 				isIdDuplicationCheck = true;
 				duplicationCheckedId = idfield.getText();
 			}
@@ -276,23 +289,23 @@ public class MembershipFrame extends JFrame {
 	class joinResult implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (!isIdDuplicationCheck && duplicationCheckedId.equals(idfield.getText())) {
-				NullWarning.showMessageDialog(idfield, "아이디 중복확인 하세요!");
+				NullWarning.showMessageDialog(idfield, "아이디 중복확인 하세요!", "앗!", JOptionPane.NO_OPTION, infoIcon);
 			}
 			else if (passwordfield.getText().equals("")) {
-				NullWarning.showMessageDialog(idfield, "비밀번호 안넣으셨어요!!");
+				NullWarning.showMessageDialog(idfield, "비밀번호 안넣으셨어요!!", "앗!", JOptionPane.NO_OPTION, infoIcon);
 			}
 			else if (nameTextfield.getText().equals("")) {
-				NullWarning.showMessageDialog(idfield, "이름을 안넣으셨어요!!");
+				NullWarning.showMessageDialog(idfield, "이름을 안넣으셨어요!!", "앗!", JOptionPane.NO_OPTION, infoIcon);
 			}
 			else if (checkSexReuslt == 2) {
-				NullWarning.showMessageDialog(idfield, "성별 입력 확인하세요!");
+				NullWarning.showMessageDialog(idfield, "성별 입력 확인하세요!", "앗!", JOptionPane.NO_OPTION, infoIcon);
 			}
 			else if (monthCombo.getSelectedIndex() == 0) {
-				NullWarning.showMessageDialog(idfield, "날짜 입력 확인하세요!");
+				NullWarning.showMessageDialog(idfield, "날짜 입력 확인하세요!", "앗!", JOptionPane.NO_OPTION, infoIcon);
 			}
 
 			else if (dayCombo.getSelectedIndex() == 0) {
-				NullWarning.showMessageDialog(idfield, "날짜 입력 확인하세요!");
+				NullWarning.showMessageDialog(idfield, "날짜 입력 확인하세요!", "앗!", JOptionPane.NO_OPTION, infoIcon);
 			}
 			
 			if (!idfield.getText().equals("") && !passwordfield.getText().equals("")
@@ -304,14 +317,13 @@ public class MembershipFrame extends JFrame {
 
 				UserDAO memberDAO = new UserDAO();
 				if (memberDAO.joinMember(memberInfos.get(idfield.getText()))) {
-					NullWarning.showMessageDialog(joinbtnPanel, "가입완료!!");
+					NullWarning.showMessageDialog(joinbtnPanel, "가입완료!!", "축하드립니다!!", JOptionPane.NO_OPTION, infoIcon);
 					dispose();
 					// 로그인창은 꺼지지 않아야 합니다.
 
 				}
 			}
 		}
-	}
-	
+	}	
 	
 }
