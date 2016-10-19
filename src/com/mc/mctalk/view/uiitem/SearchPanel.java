@@ -25,7 +25,7 @@ public class SearchPanel extends JPanel{
 	private JTextField tfSearch;
 	private JLabel jlSearch;
 	
-	public SearchPanel() {
+	public SearchPanel(String str) {
 		this.setLayout(new BorderLayout());
 		pSearchInner = new JPanel();
 		pSearchOuter = new JPanel();
@@ -39,7 +39,7 @@ public class SearchPanel extends JPanel{
 		tfSearch = new JTextField();
 		tfSearch.setPreferredSize(new Dimension(290, 15));
 		tfSearch.setBorder(BorderFactory.createEmptyBorder());
-		PromptSupport.setPrompt("이름검색", tfSearch);
+		PromptSupport.setPrompt(str, tfSearch);
 		
 		jlSearch = new JLabel(new ImageIcon("images/icon_search.png"));
 		pSearchInner.add(jlSearch);

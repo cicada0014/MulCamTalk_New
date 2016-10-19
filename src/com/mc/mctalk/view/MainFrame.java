@@ -55,6 +55,8 @@ public class MainFrame extends JFrame {
 		pMainMenu = new MainMenuPanel(this, client);
 		pFriendsList = new FriendsListPanel(client);
 		pChattingList = new ChattingRoomListPanel(client);
+		
+		client.setHtMainFrame(loginID, this);
 		pSetting = new SettingPanel();
 		
 		//* panel setting

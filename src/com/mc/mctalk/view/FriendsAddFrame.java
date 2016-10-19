@@ -132,7 +132,7 @@ public class FriendsAddFrame extends JFrame {
 	
 	public void initPanel(){
 //		this.setLayout(new BorderLayout());
-		sPanel = new SearchPanel();
+		sPanel = new SearchPanel("이름검색");
 		nameField = sPanel.getTfSearch();
 		nameField.addKeyListener(new MemberSearchListener());
 		
