@@ -20,7 +20,7 @@ import javax.swing.border.EmptyBorder;
 import com.mc.mctalk.chatserver.ChattingClient;
 
 public class MainMenuPanel extends JPanel {
-	private MainFrame mainFrame;
+	private static MainFrame mainFrame;
 	private ChattingClient client;
 	private JPanel pMenuBtn, pAddBtn;
 	private JButton[] menuButtons = new JButton[3];
@@ -167,7 +167,7 @@ public class MainMenuPanel extends JPanel {
 			int selectedIndex = Integer.parseInt(e.getActionCommand());
 			
 			if(selectedIndex==0){
-				FriendsAddFrame addFriend = new FriendsAddFrame();
+				FriendsAddFrame addFriend = new FriendsAddFrame(client);
 			}else{
 				//방 추가 프레임 연결 2016.10.7
 				CreatingChattingRoomPanel creatingChattingRoom = new CreatingChattingRoomPanel(client, mainFrame);
@@ -191,5 +191,9 @@ public class MainMenuPanel extends JPanel {
 		@Override
 		public void mouseDragged(MouseEvent e) {
 		}
+	}
+	
+	public static MainFrame getMainFrame() {
+		return mainFrame;
 	}
 }

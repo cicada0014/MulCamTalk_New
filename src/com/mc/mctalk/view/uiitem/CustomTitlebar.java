@@ -92,7 +92,7 @@ public class CustomTitlebar extends JPanel{
 				frame.setExtendedState(JFrame.ICONIFIED);
 			}else if(button == btnClose){
 				if(client != null) client.stopClient();
-				System.exit(0);
+				frame.dispose();
 //				int isExit = JOptionPane.showConfirmDialog(getContentPane(), "종료하시겠습니까?", "종료", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null);
 //    			if(isExit==0){
 //    				System.exit(0);

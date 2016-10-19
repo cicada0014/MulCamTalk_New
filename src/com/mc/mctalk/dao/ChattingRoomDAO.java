@@ -49,29 +49,42 @@ public class ChattingRoomDAO {
 															 + "where room_id = ?) ";	 
 	private String searchChatRoomInfoSQL = "select room_id, room_name from chat_rooms where room_id = ? ";	 			
 	private String insertMessageToDBSQL = "INSERT INTO messages (room_id,msg_sent_user_id,"
-			+ "msg_content,msg_sent_time) values (? ,? ,? ,?)";
-	private String insertDisconnClientSQL = "INSERT INTO disconn_client (msg_id,disconn_client_id) "
-			+ "values (?,?)"; 
+														+ "msg_content,msg_sent_time) values (? ,? ,? ,?)";
+	private String insertDisconnClientSQL = "INSERT INTO disconn_client (msg_id,disconn_client_id) values (?,?)"; 
 	private String searchChatRoomListSQL =  "SELECT cr.room_id, cr.room_name, cru.user_cnt, ms.msg_content last_msg_content, ms.msg_sent_time last_msg_sent_time, dc.unread_msg_cnt, path.path "
 													 	 + "FROM chat_rooms cr "
 														 + "LEFT JOIN (select room_id, count(user_id) user_cnt from chat_room_users where cru_left_time is null "
 														 + "				  and room_id in (select room_id from chat_room_users where user_id = ?) group by room_id) cru "
 														 + "		ON	cr.room_id = cru.room_id "
-														 + "LEFT JOIN (select msg_id, room_id, msg_content, msg_sent_time from messages group by room_id order by msg_sent_time desc) ms "
-														 + "		ON	cr.room_id = ms.room_id "
-														 + "LEFT JOIN (select ms.room_id, count(ms.msg_id) unread_msg_cnt from disconn_client dc, messages ms	where dc.msg_id = ms.msg_id group by ms.room_id) dc "
+														 + "LEFT JOIN (select msg_id, room_id, msg_content, msg_sent_time " 
+												 		 + " 				from (select  @ROWNUM := @ROWNUM + 1 AS ROWNUM, ms.* " 
+										 		 	     + " 					     from messages ms, (SELECT @ROWNUM := 0) R "
+									 		 	     	 + " 						order by msg_sent_time desc) f "
+									 		 	     	 + "				group by room_id "
+									 		 	     	 + "				order by msg_sent_time desc) ms "
+									 		 	     	 + "		ON cr.room_id = ms.room_id "
+														 + "LEFT JOIN (select ms.room_id, count(ms.msg_id) unread_msg_cnt from disconn_client dc, messages ms	where dc.msg_id = ms.msg_id and ms.msg_sent_user_id != ? group by ms.room_id) dc "
 														 + "		ON cr.room_id = dc.room_id "
 														 + "LEFT JOIN (select cru.room_id, (select user_pf_img_path from users where user_id = cru.user_id) path "
 														 + "				from chat_room_users cru "
 														 + "				where cru_left_time is null "
 														 + "				and room_id in (select room_id from chat_room_users where user_id = ?) "
-														 + "				and user_id != 'test' "
+														 + "				and user_id != ? "
 														 + "				group by room_id "
 														 + "				having count(user_id) = 1) path "
 														 + "		ON cr.room_id = path.room_id "
 														 + "WHERE cru.user_cnt is not null "
 														 + "GROUP BY cr.room_id "
 														 + "ORDER BY ms.msg_sent_time desc, cr.room_id desc ";
+	private String getChatRoomMessagesSQL = "SELECT ms.room_id, "
+															 + "		 ms.msg_id,"
+															 + "		 ms.msg_sent_user_id, "
+															 + "	 	 (select user_name from users where user_id = ms.msg_sent_user_id) msg_sent_user_name, "
+															 + "		 ms.msg_content, "
+															 + "		 ms.msg_sent_time  "
+															 + "FROM messages ms "
+															 + "WHERE room_id = ? " 
+															 + "ORDER BY msg_sent_time asc, msg_id asc ";
 	
 	//접속하지 않은 유저에게 메시지 전송시 관련 정보 입력
 	public void insertDiconnClient(String msg_id, String disconnClient){
@@ -234,6 +247,9 @@ public class ChattingRoomDAO {
 			stmt = conn.prepareStatement(searchChatRoomListSQL);
 			stmt.setString(1, loginID);
 			stmt.setString(2, loginID);
+			stmt.setString(3, loginID);
+			stmt.setString(4, loginID);
+
 			rst = stmt.executeQuery();
 			
 			while(rst.next()){
@@ -311,8 +327,39 @@ public class ChattingRoomDAO {
 		return listChattingUserIDs;
 	}
 	
-	
+	//채팅 방 한개에 대한 메시지 이력 불러오기
+	public Map<String, MessageVO> getChatRoomMessageMap(String roomID){
+		System.out.println(TAG + "getChatRoomMessages()");
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		Map<String, MessageVO> MessageVOMap = new LinkedHashMap<String, MessageVO>();
 
-	
-	
+		try{
+			conn = JDBCUtil.getConnection();
+			stmt = conn.prepareStatement(getChatRoomMessagesSQL);
+			stmt.setString(1, roomID);
+			rst = stmt.executeQuery();
+
+			while (rst.next()) {
+				MessageVO messageVO = new MessageVO(); 
+				ChattingRoomVO roomVO = new ChattingRoomVO(); 
+				roomVO.setChattingRoomID(rst.getString(1));
+				messageVO.setRoomVO(roomVO);
+				messageVO.setMessageID(rst.getString(2));
+				messageVO.setSendUserID(rst.getString(3));
+				messageVO.setSendUserName(rst.getString(4));
+				messageVO.setMessage(rst.getString(5));
+				messageVO.setSendTime(rst.getString(6));
+				MessageVOMap.put(rst.getString(2), messageVO);
+			}
+			
+		}catch(SQLException e){
+			System.out.println("addUserToChattingRoom e : " + e);
+		}finally {
+			JDBCUtil.close(rst,stmt, conn);
+		}
+		return MessageVOMap;
+	}
 }
