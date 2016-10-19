@@ -167,7 +167,7 @@ public class MainMenuPanel extends JPanel {
 			int selectedIndex = Integer.parseInt(e.getActionCommand());
 			
 			if(selectedIndex==0){
-				FriendsAddFrame addFriend = new FriendsAddFrame(client);
+				FriendsAddFrame addFriend = new FriendsAddFrame(client, mainFrame);
 			}else{
 				//방 추가 프레임 연결 2016.10.7
 				CreatingChattingRoomPanel creatingChattingRoom = new CreatingChattingRoomPanel(client, mainFrame);
@@ -192,7 +192,6 @@ public class MainMenuPanel extends JPanel {
 		public void mouseDragged(MouseEvent e) {
 		}
 	}
-	
 	public static MainFrame getMainFrame() {
 		return mainFrame;
 	}

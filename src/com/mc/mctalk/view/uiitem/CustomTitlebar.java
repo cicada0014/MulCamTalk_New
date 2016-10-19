@@ -32,7 +32,7 @@ public class CustomTitlebar extends JPanel{
 	public void setLblTitle(JLabel lblTitle) {
 		this.lblTitle = lblTitle;
 	}
-	public CustomTitlebar(JFrame frame, ChattingClient client,boolean isMainFrame){
+	public CustomTitlebar(JFrame frame, ChattingClient client, boolean isMainFrame){
 		this.frame = frame;
 		this.client = client;
 		this.isMainFrame = isMainFrame;
@@ -99,7 +99,7 @@ public class CustomTitlebar extends JPanel{
 				frame.setExtendedState(JFrame.ICONIFIED);
 			}else if(button == btnClose){
 				if(client != null) client.stopClient();
-				if(isMainFrame=false){
+				if(isMainFrame == false){
 					frame.dispose();
 				}else{
 					System.exit(0);
