@@ -38,12 +38,13 @@ import javax.swing.border.LineBorder;
 import com.mc.mctalk.chatserver.ChattingClient;
 import com.mc.mctalk.chatserver.ChattingController;
 import com.mc.mctalk.view.uiitem.CustomJScrollPane;
+import com.mc.mctalk.view.uiitem.CustomTitlebar;
 import com.mc.mctalk.view.uiitem.RoundedImageMaker;
 import com.mc.mctalk.vo.UserVO;
 
 public class CreatingChattingRoomPanel extends JFrame {
 	private RoundedImageMaker imageMaker = new RoundedImageMaker();
-	private JPanel topPanel = new JPanel();
+	private JPanel entirePanel = new JPanel();
 	private JPanel middlePanel = new JPanel();
 	private JPanel bottomPanel = new JPanel();
 	private CustomJScrollPane ChoiceFriendListScrollPanel ;
@@ -66,6 +67,7 @@ public class CreatingChattingRoomPanel extends JFrame {
 	private Font grayFont = new Font("dialog", Font.BOLD, 12);
 	private ChattingClient client;
 	private MainFrame mainFrame;
+	private	JPanel panelAdd = new JPanel();
 	public CreatingChattingRoomPanel(ChattingClient client, MainFrame mainFrame) {
 		this.client = client;
 		this.mainFrame = mainFrame;
@@ -73,22 +75,23 @@ public class CreatingChattingRoomPanel extends JFrame {
 		// frame setting
 		this.setBackground(backGraundColor);
 		this.setSize(520, 430);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 현재 창만 꺼지도록
-		// this.setUndecorated(true);
-		this.add(topPanel, BorderLayout.NORTH);
-		this.add(middlePanel, BorderLayout.CENTER);
-		this.add(bottomPanel, BorderLayout.SOUTH);
-		topPanel.setBackground(backGraundColor);
-		topPanelLabel.setBackground(backGraundColor);
-		topCountLabel.setBackground(backGraundColor);
+		this.setUndecorated(true);
+		CustomTitlebar titleBar = new CustomTitlebar(this, client, false);
+//		titleBar.setPreferredSize(new Dimension(520, 36));
+		entirePanel.setBorder(BorderFactory.createLineBorder(new Color(82, 134, 198)));
+		entirePanel.setLayout(new BoxLayout(entirePanel, BoxLayout.Y_AXIS));
+		entirePanel.add(titleBar);
+		entirePanel.add(panelAdd);
+		entirePanel.add(middlePanel);
+		entirePanel.add(bottomPanel);
 		middlePanel.setBackground(backGraundColor);
+		middlePanel.setPreferredSize(new Dimension(520, 300));
 		bottomPanel.setBackground(backGraundColor);
 		middleSelectedFriendListPanel.setBackground(backGraundColor);
 		// topPanel setting
-		topPanel.setLayout(new BorderLayout());
-		JPanel panelAdd = new JPanel();
 		panelAdd.setBackground(backGraundColor);
-		topPanel.add(panelAdd, BorderLayout.CENTER);
+		this.add(entirePanel);
+		
 		panelAdd.add(topPanelLabel);
 		panelAdd.add(topCountLabel);
 		closeBtn.setBackground(backGraundColor);

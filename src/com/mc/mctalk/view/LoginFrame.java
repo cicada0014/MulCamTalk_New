@@ -47,7 +47,7 @@ public class LoginFrame extends JFrame {
 		this.setLocation((screenSize.width - frameSize.width-300)/2, (screenSize.height - frameSize.height-600)/2);
 		
 		this.setUndecorated(true);
-		CustomTitlebar ct = new CustomTitlebar(this, null);
+		CustomTitlebar ct = new CustomTitlebar(this, null,true);
 		ct.setBounds(0, 0, 380, 36);
 		add(ct);
 		
