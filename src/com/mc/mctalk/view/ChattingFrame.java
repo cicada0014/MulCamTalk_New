@@ -34,6 +34,7 @@ import javax.swing.text.StyledDocument;
 
 import com.google.gson.Gson;
 import com.mc.mctalk.chatserver.ChattingClient;
+import com.mc.mctalk.dao.ChattingRoomDAO;
 import com.mc.mctalk.view.uiitem.CustomJScrollPane;
 import com.mc.mctalk.view.uiitem.NotificationAlarmPlayer;
 import com.mc.mctalk.vo.ChattingRoomVO;
@@ -216,10 +217,27 @@ public class ChattingFrame extends JFrame {
 		}
 	}
 	
-	public void textAreaSetText(String msg) {
-		MainMenuPanel.getMainFrame().changePanel("chattingList");
+	//지난 대화 내역 불러오기
+	public void loadMessageHistory() {
+		ChattingRoomDAO dao = new ChattingRoomDAO();
+		ArrayList<MessageVO> MessageVOArray = dao.getChatRoomMessageArray(roomID);
+		for (int i = 0; i < MessageVOArray.size(); i++) {
+			MessageVO messageVO = MessageVOArray.get(i);
+			setMessageToJTextPane(messageVO);
+		}
+	}
+	
+	//채팅 클라이언트로 부터 메시지 받아 JSON 파싱하기
+	public void recieveMessageFromChattingClient(String msg) {
+//		ChattingRoomListPanel crl = client.getHtChattingListPanel(loginID);
+		new ChattingRoomListPanel(client);
 		MessageVO messageVO = gson.fromJson(msg, MessageVO.class);
-		msg = messageVO.getMessage().replace("/n", "\n") + "\n";
+		setMessageToJTextPane(messageVO);
+	}
+	
+	//채팅 GUI(JTextPane)에 받은 메시지 올리기
+	public void setMessageToJTextPane(MessageVO messageVO){
+		String msg = messageVO.getMessage().replace("/n", "\n") + "\n";
 		String msgSendTime = messageVO.getSendTime();
 		
 		// 문자가 길면 개행을 하기 위해 인덱스값으로 인서트가 가능한 스트링 버퍼에 담기
@@ -312,10 +330,9 @@ public class ChattingFrame extends JFrame {
 		}
 		
 		taChatInPut.setText(""); // 채팅입력창 초기화
-		
-		//추가할 사항
-		//공지(입장 퇴장 할때 메시지) 가운데로 폰트 따로 지정해서 출력 필요
 	}
+	
+	
 	
 	public static void main(String[] args) {
 		ChattingFrame a = new ChattingFrame(new ChattingClient(new UserVO()), null);

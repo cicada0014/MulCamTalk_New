@@ -50,44 +50,41 @@ import com.mc.mctalk.vo.ChattingRoomVO;
 import com.mc.mctalk.vo.UserVO;
 
 public class ChattingRoomListPanel extends JPanel {
-   //선택된 친구목록 모음 (맵)
-   private Map<String, UserVO> selectedFriends = new LinkedHashMap<>();
-   private Robot clickRobot ;
    private RoundedImageMaker imageMaker = new RoundedImageMaker();
    private ChattingClient client;
-   
    private String loginID;
-   private ArrayList<UserVO> alFriendsList;
    private Map<String, ChattingRoomVO> roomVOMap;
 
-   private JList jlFriendsList;
+   private JList jlChattingRoomList;
    private CustomJScrollPane scrollPane;
    private DefaultListModel listModel;
    private SearchPanel pSearch;
    private JTextField tfSearch;
    
-   SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-   Date times = null;
-   SimpleDateFormat formatter1 = new SimpleDateFormat("aahh:mm", Locale.KOREA); 
+   private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+   private SimpleDateFormat formatter1 = new SimpleDateFormat("aahh:mm", Locale.KOREA); 
+   private Date times = null;
+   private JPanel thisJPanel = null;
+   
    
    public ChattingRoomListPanel(ChattingClient client) {
+	  this.thisJPanel = this;
       this.client = client;
       this.loginID = client.getLoginUserVO().getUserID();
       initPanel();
    }
    
-   
    public void initPanel(){
       this.setLayout(new BorderLayout());
       //친구 찾기 패널 생성 및 해당 서치 키워드 액션 리스너 연결
-      pSearch = new SearchPanel();
+      pSearch = new SearchPanel("채팅방 이름 검색");
       tfSearch = pSearch.getTfSearch();
       tfSearch.addKeyListener(new FriendSearchKeyListener());
       tfSearch.setPreferredSize(new Dimension(325, 15));
 
       // JList에 데이터 담기
-      jlFriendsList = new JList(new DefaultListModel());
-      listModel = (DefaultListModel) jlFriendsList.getModel();
+      jlChattingRoomList = new JList(new DefaultListModel());
+      listModel = (DefaultListModel) jlChattingRoomList.getModel();
       
       //DB접속 후 친구 목록 가져와 Custom JList Model에 프로필 사진 path, 이름 엘리먼트 추가하기.
       ChattingRoomDAO dao = new ChattingRoomDAO();
@@ -96,10 +93,10 @@ public class ChattingRoomListPanel extends JPanel {
       addElementToJList();
       
       // JList 모양 변경
-      jlFriendsList.setCellRenderer(new FriendsListCellRenderer());
-      jlFriendsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      jlFriendsList.addMouseListener(new FriendSelectionListener());
-      scrollPane = new CustomJScrollPane(jlFriendsList,scrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,scrollPane.HORIZONTAL_SCROLLBAR_NEVER, true);
+      jlChattingRoomList.setCellRenderer(new FriendsListCellRenderer());
+      jlChattingRoomList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+      jlChattingRoomList.addMouseListener(new FriendSelectionListener());
+      scrollPane = new CustomJScrollPane(jlChattingRoomList,scrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,scrollPane.HORIZONTAL_SCROLLBAR_NEVER, true);
 //      scrollPane = new CustomJScrollPane(jlFriendsList);
       scrollPane.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 0, new Color(230, 230, 230)));
 
@@ -125,9 +122,9 @@ public class ChattingRoomListPanel extends JPanel {
       @Override
       public void mouseClicked(MouseEvent e) {
          //getClickCount가 2 이상이면 더블클릭으로 판단함 && 선택된 인덱스가 -1이면 제대로된 선택이 아님
-         if(e.getClickCount() >= 2 && jlFriendsList.getSelectedIndex() != -1){
+         if(e.getClickCount() >= 2 && jlChattingRoomList.getSelectedIndex() != -1){
             //선택된 친구ID와 로그인 ID를 매개변수로 컨트롤러 호출
-			ChattingRoomVO vo = (ChattingRoomVO)jlFriendsList.getSelectedValue();
+			ChattingRoomVO vo = (ChattingRoomVO)jlChattingRoomList.getSelectedValue();
 			new ChattingController(client).openChattingRoom(vo.getChattingRoomID());
          }
       }
@@ -423,18 +420,11 @@ public class ChattingRoomListPanel extends JPanel {
    }
 
    public JList getJlFriendsList() {
-      return jlFriendsList;
+      return jlChattingRoomList;
    }
 
    public void setJlFriendsList(JList jlFriendsList) {
-      this.jlFriendsList = jlFriendsList;
+      this.jlChattingRoomList = jlFriendsList;
    }
 
-   public Map<String, UserVO> getSelectedFriends() {
-      return selectedFriends;
-   }
-
-   public void setSelectedFriends(Map<String, UserVO> selectedFriends) {
-      this.selectedFriends = selectedFriends;
-   }
 }

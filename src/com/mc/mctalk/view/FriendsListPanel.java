@@ -88,7 +88,7 @@ public class FriendsListPanel extends JPanel {
 	public void initPanel(boolean hasMultiSelectionFuntion){
 		this.setLayout(new BorderLayout());
 		//친구 찾기 패널 생성 및 해당 서치 키워드 액션 리스너 연결
-		pSearch = new SearchPanel();
+		pSearch = new SearchPanel("이름검색");
 		tfSearch = pSearch.getTfSearch();
 		tfSearch.addKeyListener(new FriendSearchKeyListener());
 		tfSearch.setPreferredSize(new Dimension(325, 15));

@@ -14,6 +14,8 @@ import java.util.Hashtable;
 import java.util.Map;
 import com.google.gson.Gson;
 import com.mc.mctalk.view.ChattingFrame;
+import com.mc.mctalk.view.ChattingRoomListPanel;
+import com.mc.mctalk.view.MainFrame;
 import com.mc.mctalk.vo.ChattingRoomVO;
 import com.mc.mctalk.vo.MessageVO;
 import com.mc.mctalk.vo.UserVO;
@@ -31,6 +33,7 @@ public class ChattingClient {
 	private String loginUserID;
 	private Map<String, ChattingFrame> htChattingGUI; //채팅방 GUI 맵
 	private Map<String, ChattingRoomVO> htRoomVO; //채팅방  맵
+	private Map<String, MainFrame> htMainFrame; //채팅방 GUI 맵
 	private Gson gson = new Gson();
 
 	public ChattingClient(UserVO vo){
@@ -38,6 +41,7 @@ public class ChattingClient {
 		this.loginUserID = vo.getUserID();
 		this.htChattingGUI = new Hashtable<>();
 		this.htRoomVO = new Hashtable<>();
+		this.htMainFrame = new Hashtable<>();
 
 		if(socket==null){
 			startClient();
@@ -87,9 +91,10 @@ public class ChattingClient {
 					MessageVO vo = gson.fromJson(reveiveMsg, MessageVO.class);
 					//json으로 받은 메시지에 딸려온 roomID로 채팅방 맵에서 해당 UI를 찾아옴
 					ChattingFrame cf = htChattingGUI.get(vo.getRoomVO().getChattingRoomID());
+					htMainFrame.get(loginUserID).changePanel("chattingList");
 					//해당 roomID를 가진 ChattingFrame으로 텍스트 전송
 					if(cf != null){
-						cf.textAreaSetText(reveiveMsg+"\n");
+						cf.recieveMessageFromChattingClient(reveiveMsg+"\n");
 					}else if(cf==null){
 						//// 열고자하는 채팅방 룸아이디에 해당하는 GUI가 없다면 예외가 발생하지 않음 조건문으로 서버에 반송 
 						System.out.println("반송 시작  ");
@@ -166,6 +171,14 @@ public class ChattingClient {
 	public void removeHtChattingGUI(String roomID) {
 		System.out.println(TAG + "removeHtChattingGUI()");
 		htChattingGUI.remove(roomID);
+	}
+	
+	public MainFrame getHtChattingListPanel(String loginID) {
+		MainFrame returnCrp = htMainFrame.get(loginID);
+		return returnCrp;
+	}
+	public void setHtMainFrame(String loginID, MainFrame mainFrame) {
+		this.htMainFrame.put(loginID, mainFrame);
 	}
 	
 	//메시지 전송 시간 구하기

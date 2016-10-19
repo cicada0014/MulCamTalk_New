@@ -1,15 +1,14 @@
 package com.mc.mctalk.chatserver;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-import com.google.gson.Gson;
+import javax.swing.JPanel;
+
 import com.mc.mctalk.dao.ChattingRoomDAO;
 import com.mc.mctalk.view.ChattingFrame;
 import com.mc.mctalk.vo.ChattingRoomVO;
-import com.mc.mctalk.vo.MessageVO;
 import com.mc.mctalk.vo.UserVO;
 
 /** 채팅 프레임 호출
@@ -77,28 +76,6 @@ public class ChattingController {
 		return roomID;
 	}
 	
-//	//채팅방에 지난 메시지 이력 출력하기
-//	public void setMessagesToChattingRoom(String roomID, ChattingFrame cf){
-//		Gson gson = new Gson();
-//		Map<String, MessageVO> MessageVOMap = dao.getChatRoomMessageMap(roomID);
-//		Set<Map.Entry<String, MessageVO>> entrySet = MessageVOMap.entrySet();
-//		Iterator<Map.Entry<String, MessageVO>> entryIterator = entrySet.iterator();
-//		while (entryIterator.hasNext()) {
-//			Map.Entry<String, MessageVO> entry = entryIterator.next();
-//			MessageVO vo = entry.getValue();
-//			cf.textAreaSetText(gson.toJson(vo));
-//		}
-//	}
-	//채팅방에 지난 메시지 이력 출력하기
-	public void setMessagesToChattingRoom(String roomID, ChattingFrame cf){
-		Gson gson = new Gson();
-		ArrayList<MessageVO> MessageVOArray = dao.getChatRoomMessageArray(roomID);
-		for (int i = 0; i < MessageVOArray.size(); i++) {
-			MessageVO vo = MessageVOArray.get(i);
-			cf.textAreaSetText(gson.toJson(vo));
-		}
-	}
-
 	public void openChattingRoom(String roomID) {
 		System.out.println(TAG + "openChattingRoom()");
 		ChattingFrame openedChattingGUI = client.getHtChattingGUI(roomID);
@@ -107,7 +84,7 @@ public class ChattingController {
 		if (openedChattingGUI == null) {
 			ChattingRoomVO roomVO = dao.getChatRoomVO(roomID);
 			ChattingFrame cf = new ChattingFrame(client, roomVO);
-			setMessagesToChattingRoom(roomID,cf);
+			cf.loadMessageHistory();
 		} else {
 			openedChattingGUI.requestFocus();
 			openedChattingGUI.setState(java.awt.Frame.NORMAL);
