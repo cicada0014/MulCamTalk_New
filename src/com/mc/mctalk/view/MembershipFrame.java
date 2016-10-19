@@ -124,9 +124,9 @@ public class MembershipFrame extends JFrame {
 		idfield.setPreferredSize(idfield.getSize());
 		idDuplicationBtn.setBackground(backGroundColor);
 		idPanel.add(idfield);
-		idfield.setPreferredSize(new Dimension(150, 27));
-		idDuplicationBtn.setPreferredSize(new Dimension(60, 27));
-		idDuplicationBtn.setFont(new Font("dialog", Font.PLAIN, 10));
+		idfield.setPreferredSize(new Dimension(140, 27));
+		idDuplicationBtn.setPreferredSize(new Dimension(70, 27));
+		idDuplicationBtn.setFont(new Font("dialog", Font.PLAIN, 9));
 		idDuplicationBtn.setText("중복확인");
 		idDuplicationBtn.addActionListener(new idDuplicationCheck());
 		idPanel.add(idDuplicationBtn);
