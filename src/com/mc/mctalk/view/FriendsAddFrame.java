@@ -75,6 +75,8 @@ public class FriendsAddFrame extends JFrame {
 	private CustomTitlebar title;
 	private MainFrame mainFrame;
 	
+	private int count = 0;
+	
 	public FriendsAddFrame(ChattingClient client, MainFrame mainFrame)
 	{
 		this.client = client;
@@ -109,8 +111,8 @@ public class FriendsAddFrame extends JFrame {
 		secondPanel.add(listScroll);
 //		secondPanel.setPreferredSize(new Dimension(300, 150));
 		listScroll.setViewportView(searchList);
-		listScroll.setPreferredSize(new Dimension(270, 200));
-		searchList.setPreferredSize(new Dimension(250, 200));
+//		listScroll.setPreferredSize(new Dimension(270, 200));
+		searchList.setPreferredSize(new Dimension(250, 600));
 		add(secondPanel);
 		secondPanel.setBounds(0, 100, 300, 200);
 		
@@ -119,17 +121,17 @@ public class FriendsAddFrame extends JFrame {
 		addBtn.setPreferredSize(new Dimension(270, 30));
 		addBtn.addActionListener(new MemberAddListener());
 		add(thirdPanel);
-		thirdPanel.setBounds(0, 320, 300, 50);
+		thirdPanel.setBounds(0, 300, 300, 50);
 		
 		this.setTitle("친구 추가");
-		this.setSize(300, 380);
+		this.setSize(300, 360);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setResizable(false);
 		this.setVisible(true);
 	}
 	
 	public void initPanel(){
-		this.setLayout(new BorderLayout());
+//		this.setLayout(new BorderLayout());
 		sPanel = new SearchPanel();
 		nameField = sPanel.getTfSearch();
 		nameField.addKeyListener(new MemberSearchListener());
@@ -171,6 +173,7 @@ public class FriendsAddFrame extends JFrame {
 				}
 			}
 		}
+		count = listModel.getSize();
 //		System.out.println(listModel);
 	}
 	
