@@ -2,11 +2,15 @@ package com.mc.mctalk.chatserver;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
+import com.google.gson.Gson;
 import com.mc.mctalk.dao.ChattingRoomDAO;
 import com.mc.mctalk.view.ChattingFrame;
 import com.mc.mctalk.vo.ChattingRoomVO;
+import com.mc.mctalk.vo.MessageVO;
 import com.mc.mctalk.vo.UserVO;
 
 /** 채팅 프레임 호출
@@ -23,7 +27,7 @@ public class ChattingController {
 	ChattingClient client;
 	LinkedHashMap<String, UserVO> selectedFriends;
 
-	//채티창 오픈용 생성자
+	//채팅창 오픈용 생성자
 	public ChattingController(ChattingClient client){
 		this.client = client;
 	}
@@ -73,18 +77,20 @@ public class ChattingController {
 		}
 		return roomID;
 	}
-
-	//메소드 make1onNChattingRoom으로 통합 사용
-//	public String make1on1ChattingRoom(){
-//		//user들을 객체로 받아서 반복문으로 insert 해줄 필요 있음
-//		String roomID = dao.make1on1ChattingRoom(loginID, friendID);
-//		if(roomID!=null){
-//			System.out.println(roomID);
-//			dao.addUserToChattingRoom(roomID, loginID);
-//			dao.addUserToChattingRoom(roomID, friendID);
-//		}
-//		return roomID;
-//	}
+	
+	//채팅방에 지난 메시지 이력 출력하기
+	public void setMessagesToChattingRoom(String roomID, ChattingFrame cf){
+		Map<String, MessageVO> MessageVOMap = dao.getChatRoomMessageMap(roomID);
+		Set<Map.Entry<String, MessageVO>> entrySet = MessageVOMap.entrySet();
+		Iterator<Map.Entry<String, MessageVO>> entryIterator = entrySet.iterator();
+		while (entryIterator.hasNext()) {
+			Map.Entry<String, MessageVO> entry = entryIterator.next();
+			MessageVO vo = entry.getValue();
+			Gson gson = new Gson();
+			String msg = gson.toJson(vo);
+			cf.textAreaSetText(msg);
+		}
+	}
 
 	public void openChattingRoom(String roomID) {
 		System.out.println(TAG + "openChattingRoom()");
@@ -94,6 +100,7 @@ public class ChattingController {
 		if (openedChattingGUI == null) {
 			ChattingRoomVO roomVO = dao.getChatRoomVO(roomID);
 			ChattingFrame cf = new ChattingFrame(client, roomVO);
+			setMessagesToChattingRoom(roomID,cf);
 		} else {
 			openedChattingGUI.requestFocus();
 			openedChattingGUI.setState(java.awt.Frame.NORMAL);

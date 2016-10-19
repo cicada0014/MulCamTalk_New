@@ -120,22 +120,22 @@ public class ChattingRoomListPanel extends JPanel {
       }
    }
    
-	//선택된 친구에 대한 더블클릭 리스너
-	class FriendSelectionListener implements MouseListener {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			//getClickCount가 2 이상이면 더블클릭으로 판단함 && 선택된 인덱스가 -1이면 제대로된 선택이 아님
-			if(e.getClickCount() >= 2 && jlFriendsList.getSelectedIndex() != -1){
-				//선택된 친구ID와 로그인 ID를 매개변수로 컨트롤러 호출
+   //선택된 친구에 대한 더블클릭 리스너
+   class FriendSelectionListener implements MouseListener {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+         //getClickCount가 2 이상이면 더블클릭으로 판단함 && 선택된 인덱스가 -1이면 제대로된 선택이 아님
+         if(e.getClickCount() >= 2 && jlFriendsList.getSelectedIndex() != -1){
+            //선택된 친구ID와 로그인 ID를 매개변수로 컨트롤러 호출
 				ChattingRoomVO vo = (ChattingRoomVO)jlFriendsList.getSelectedValue();
-				new ChattingController(client).openChattingRoom(vo.getChattingRoomID());;
-			}
-		}
-		public void mouseReleased(MouseEvent arg0) {}
-		public void mousePressed(MouseEvent arg0) {}
-		public void mouseExited(MouseEvent arg0) {}
-		public void mouseEntered(MouseEvent arg0) {}
-	}
+				new ChattingController(client).openChattingRoom(vo.getChattingRoomID());
+         }
+      }
+      public void mouseReleased(MouseEvent arg0) {}
+      public void mousePressed(MouseEvent arg0) {}
+      public void mouseExited(MouseEvent arg0) {}
+      public void mouseEntered(MouseEvent arg0) {}
+   }
    
    //TextField 검색 키보드 리스너(입력될때마다 리스너 실행)
    class FriendSearchKeyListener implements KeyListener {
@@ -189,6 +189,11 @@ public class ChattingRoomListPanel extends JPanel {
       private JLabel unreadmsg = new JLabel();
       private JLabel lastMsgTime = new JLabel();
       private JPanel brank = new JPanel();
+      private JPanel brank1 = new JPanel();
+      private JPanel brank2 = new JPanel();
+      
+      private JPanel uppanel = new JPanel();
+      private JPanel downpanel = new JPanel();
       
       
 
@@ -208,32 +213,42 @@ public class ChattingRoomListPanel extends JPanel {
          lbStatMsg.setFont(new Font("Malgun Gothic", Font.PLAIN, 10));
          lbStatMsg.setBorder(new EmptyBorder(0, 10, 0, 10));
          
-         lbName.setPreferredSize(new Dimension(0, 0));
-         groupIcon.setPreferredSize(new Dimension(3000, 200));
+         
+         lastMsgTime.setFont(new Font("Monospaced",Font.PLAIN, 12));
+         lastMsgTime.setForeground(Color.lightGray);
+         lbName.setPreferredSize(new Dimension(400000, 500));
          lbStatMsg.setPreferredSize(new Dimension(220, 0));
 //         lastMsgTime.setPreferredSize(new Dimension(0, 0));
-         unreadmsg.setPreferredSize(new Dimension(0, 0));
+         unreadmsg.setPreferredSize(new Dimension(30, 0));
          
          
          
          
-         
-         
-         panelText = new JPanel(new GridLayout(2,3));
+         panelText = new JPanel(new GridLayout(1,2));
          panelText.setBorder(new EmptyBorder(15, 10, 15, 0));
 //         panelText.setPreferredSize(new Dimension(50, 100));
          
-         
+         uppanel.setLayout(new BorderLayout());
+         downpanel.setLayout(new BorderLayout());
          
          brank.setLayout(new BorderLayout());
+         brank1.setLayout(new BorderLayout());
          
-         panelText.add(lbName);
-         panelText.add(groupIcon);
-         panelText.add(brank);
+         
+         
+         panelText.add(uppanel);
+         panelText.add(downpanel);
+         
+         
+         uppanel.add(lbName,BorderLayout.LINE_START);
+         uppanel.add(groupIcon,BorderLayout.CENTER);
+         uppanel.add(brank,BorderLayout.EAST);
          brank.add(lastMsgTime,BorderLayout.EAST);
 //         panelText.add(lastMsgTime);
-         panelText.add(lbStatMsg);
-         panelText.add(unreadmsg);
+         downpanel.add(lbStatMsg,BorderLayout.LINE_START);
+//         downpanel.add(brank2);
+         downpanel.add(brank1,BorderLayout.EAST);
+         brank1.add(unreadmsg,BorderLayout.EAST);
 //         lbCloseBtn.setPreferredSize(new Dimension(48, 45));
          
          add(lbImgIcon, BorderLayout.WEST);
@@ -246,16 +261,7 @@ public class ChattingRoomListPanel extends JPanel {
          
       }
       
-//      Date times = null;
-//      
-//      try {
-//         formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//         times = formatter.parse(msgSendTime);
-//         formatter1 = new SimpleDateFormat("aahh:mm", Locale.KOREA);
-//      } catch (ParseException e1) {
-//         e1.printStackTrace();
-//      }
-//      String formattedTime = formatter1.format(times);
+
       
       @Override
       public Component getListCellRendererComponent(JList<? extends ChattingRoomVO> list, ChattingRoomVO value, int index,
@@ -292,7 +298,7 @@ public class ChattingRoomListPanel extends JPanel {
 
             ImageIcon icon = new ImageIcon(img);
             Image image = icon.getImage();
-            Image newImage = image.getScaledInstance(40, 20, Image.SCALE_SMOOTH);
+            Image newImage = image.getScaledInstance(35, 20, Image.SCALE_SMOOTH);
 
             icon = new ImageIcon(newImage);
 
@@ -306,16 +312,7 @@ public class ChattingRoomListPanel extends JPanel {
          }
          unreadImg = null;
          if(vo.getUnReadMsgCount()>=1){
-//            try {
-//               times = formatter.parse(vo.getLasMsgSendTime());
-//            } catch (ParseException e1) {
-//               // TODO Auto-generated catch block
-//               e1.printStackTrace();
-//            }
-//            
-//         
-//            String formattedTime = formatter1.format(times);
-//            lastMsgTime.setText(formattedTime);
+            
             
             try {
                unreadImg =  ImageIO.read(new File("images/Unreadmsg.png"));
@@ -328,8 +325,9 @@ public class ChattingRoomListPanel extends JPanel {
             unreadIcon = new ImageIcon(newUnreadImage);
             
             unreadmsg.setIcon(unreadIcon);
+            unreadmsg.setForeground(Color.white);
             unreadmsg.setText(vo.getUnReadMsgCount()+"");
-            unreadmsg.setIconTextGap(-11);
+            unreadmsg.setIconTextGap(-12);
             
          }else{
             unreadmsg.setIcon(null);
@@ -340,8 +338,8 @@ public class ChattingRoomListPanel extends JPanel {
          
          
          
-         if(vo.getChattingRoomName().length()>18){
-            lbName.setText(vo.getChattingRoomName().substring(0, 17)+"...");
+         if(vo.getChattingRoomName().length()>20){
+            lbName.setText(vo.getChattingRoomName().substring(0, 19)+"...");
             
          }else{
             lbName.setText(vo.getChattingRoomName());
@@ -349,8 +347,24 @@ public class ChattingRoomListPanel extends JPanel {
          
          
          if(vo.getLastMsgContent() != null ){
+            try {
+               times = formatter.parse(vo.getLasMsgSendTime());
+            } catch (ParseException e1) {
+               // TODO Auto-generated catch block
+               e1.printStackTrace();
+            }
+            
+         
+            String formattedTime = formatter1.format(times);
+            
+            lastMsgTime.setText(formattedTime);
             System.out.println(vo.getLastMsgContent());
-            lbStatMsg.setText(vo.getLastMsgContent());
+            if(vo.getLastMsgContent().length()>40){
+               
+               lbStatMsg.setText(vo.getLastMsgContent().substring(0, 39));
+            }else{
+               lbStatMsg.setText(vo.getLastMsgContent());
+            }
             
          }else{
             lbStatMsg.setText("");
@@ -368,12 +382,19 @@ public class ChattingRoomListPanel extends JPanel {
               lbName.setBackground(list.getSelectionBackground());
               lbStatMsg.setBackground(list.getSelectionBackground());
               panelText.setBackground(list.getSelectionBackground());
+              brank.setBackground(list.getSelectionBackground());
+              brank1.setBackground(list.getSelectionBackground());
+              brank2.setBackground(list.getSelectionBackground());
+              
               setBackground(list.getSelectionBackground());
           } else { 
              lbImgIcon.setBackground(list.getBackground());
-             lbName.setBackground(list.getBackground());
+//             lbName.setBackground(list.getBackground());
              lbStatMsg.setBackground(list.getBackground());
               panelText.setBackground(list.getBackground());
+//              brank.setBackground(list.getBackground());
+              brank1.setBackground(list.getBackground());
+              brank2.setBackground(list.getBackground());
               setBackground(list.getBackground());
           }
           

@@ -217,6 +217,7 @@ public class ChattingFrame extends JFrame {
 	}
 	
 	public void textAreaSetText(String msg) {
+		MainMenuPanel.getMainFrame().changePanel("chattingList");
 		MessageVO messageVO = gson.fromJson(msg, MessageVO.class);
 		msg = messageVO.getMessage().replace("/n", "\n") + "\n";
 		String msgSendTime = messageVO.getSendTime();

@@ -20,7 +20,7 @@ import javax.swing.border.EmptyBorder;
 import com.mc.mctalk.chatserver.ChattingClient;
 
 public class MainMenuPanel extends JPanel {
-	private MainFrame mainFrame;
+	private static MainFrame mainFrame;
 	private ChattingClient client;
 	private JPanel pMenuBtn, pAddBtn;
 	private JButton[] menuButtons = new JButton[3];
@@ -191,5 +191,9 @@ public class MainMenuPanel extends JPanel {
 		@Override
 		public void mouseDragged(MouseEvent e) {
 		}
+	}
+	
+	public static MainFrame getMainFrame() {
+		return mainFrame;
 	}
 }
