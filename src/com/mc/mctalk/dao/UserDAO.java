@@ -20,15 +20,14 @@ public class UserDAO {
 												+ "and ur.user_id = ? "
 												+ "order by user_name";
 	private String memberJoinSQL =  "insert into users (user_id,user_pw,user_name,user_sex,user_birthday,user_joindate) "
-			+ "values(?,?,?,?,now(),now()) ";
-	private String memberSearchSQL = "SELECT user_name, user_pf_img_path "
-			+"from users " 
-			+"WHERE user_id NOT IN (SELECT rel_user_id from user_relation WHERE user_id = ?) "
-			+"and user_id != ?"
-			+"and user_name like ? ";
+											  + "values(?,?,?,?,now(),now()) ";
+	private String memberSearchSQL = "SELECT user_id, user_name, user_pf_img_path "
+											  	  +"from users " 
+												  +"WHERE user_id NOT IN (SELECT rel_user_id from user_relation WHERE user_id = ?) "
+												  +"and user_id != ? "
+												  +"and user_name like ? ";
+	private String memberAddSQL = "INSERT into user_relation (user_id,rel_user_id) values(?,?) ";
 	private String idDuplicationCheckSQL = "SELECT user_id FROM users WHERE user_id=?";
-	
-	
 	
 	// 회원가입
 	public boolean joinMember(UserVO memberinfoVO) {
@@ -107,35 +106,68 @@ public class UserDAO {
 	}
 	
 	//친구 추가시 회원 검색
-	public String SearchMember(String id, String searchName) {
-		System.out.println(TAG + "SearchMember()");
-		String id_result = null;
+		public Map<String, UserVO> SearchMember(String id, String searchName) {
+			System.out.println(TAG + "SearchMember()");
+			String id_result = null;
+			Map<String, UserVO> searchMap = new LinkedHashMap<String, UserVO>();
 
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rst = null;
+			Connection conn = null;
+			PreparedStatement stmt = null;
+			ResultSet rst = null;
+			UserVO vo = null;
 
-		try {
-			conn = JDBCUtil.getConnection();
-			stmt = conn.prepareStatement(memberSearchSQL); // SQL 미리 컴파일,인수값 공간
-															// 사전 확보
-			stmt.setString(1, id);
-			stmt.setString(2, id);
-			stmt.setString(3, "%" + searchName + "%"); // 쿼리 URL 중 ?를 다른 변수로 치환
-			rst = stmt.executeQuery(); // 쿼리 Execute
+			try {
+				conn = JDBCUtil.getConnection();
+				stmt = conn.prepareStatement(memberSearchSQL); // SQL 미리 컴파일,인수값 공간
+																// 사전 확보
+				stmt.setString(1, id);
+				stmt.setString(2, id);
+				stmt.setString(3, "%" + searchName + "%"); // 쿼리 URL 중 ?를 다른 변수로 치환
+				rst = stmt.executeQuery(); // 쿼리 Execute
 
-			while (rst.next()) { // 결과 집합에서 다음 레코드로 이동
-				// int id = rst.getInt(""); //현재 레코드에서 필드값 Call
-				id_result = rst.getString(1);
-				System.out.println(id_result);
+				while (rst.next()) { // 결과 집합에서 다음 레코드로 이동
+					vo = new UserVO();
+					vo.setUserID(rst.getString("user_id"));
+					vo.setUserName(rst.getString("user_name"));
+					vo.setUserImgPath(rst.getString("user_pf_img_path"));
+					searchMap.put(vo.getUserID(), vo);
+				}
+			} catch (SQLException e) {
+				System.out.println("login e : " + e);
+			} finally {
+				JDBCUtil.close(rst, stmt, conn);
 			}
-		} catch (SQLException e) {
-			System.out.println("login e : " + e);
-		} finally {
-			JDBCUtil.close(rst, stmt, conn);
+			return searchMap;
 		}
-		return id_result;
-	}
+		
+		//친구추가
+		public int AddFriend(String loginId, String addId) {
+			System.out.println(TAG + "AddFriend()");
+			String id_result = null;
+			Map<String, UserVO> addMap = new LinkedHashMap<String, UserVO>();
+
+			Connection conn = null;
+			PreparedStatement stmt = null;
+			UserVO vo = null;
+			int rst = 0;
+
+			try {
+				conn = JDBCUtil.getConnection();
+				stmt = conn.prepareStatement(memberAddSQL); // SQL 미리 컴파일,인수값 공간
+																// 사전 확보
+				stmt.setString(1, loginId); //등록할 ID
+				stmt.setString(2, addId); //추가할 친구 ID(FriendsAddFrame의 listModel에서 rel_user_id만 따서 매개변수로 사용
+				rst = stmt.executeUpdate(); // 쿼리 Execute
+
+				System.out.println(rst);
+			} catch (SQLException e) {
+				System.out.println("login e : " + e);
+			} finally {
+				JDBCUtil.close(stmt, conn);
+			}
+			return rst;
+		} 
+		
 	// 아이디중복 확인!!! 
 	public boolean idDuplicationCheckDao(String id) {
 		boolean check = true;
