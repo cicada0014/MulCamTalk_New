@@ -99,7 +99,7 @@ public class CustomTitlebar extends JPanel{
 				frame.setExtendedState(JFrame.ICONIFIED);
 			}else if(button == btnClose){
 				if(client != null) client.stopClient();
-				if(isMainFrame=false){
+				if(isMainFrame == false){
 					frame.dispose();
 				}else{
 					System.exit(0);
