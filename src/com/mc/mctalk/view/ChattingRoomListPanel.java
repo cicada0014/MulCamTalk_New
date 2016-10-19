@@ -99,8 +99,8 @@ public class ChattingRoomListPanel extends JPanel {
       jlFriendsList.setCellRenderer(new FriendsListCellRenderer());
       jlFriendsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
       jlFriendsList.addMouseListener(new FriendSelectionListener());
-//      scrollPane = new CustomJScrollPane(jlFriendsList,scrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,scrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-      scrollPane = new CustomJScrollPane(jlFriendsList);
+      scrollPane = new CustomJScrollPane(jlFriendsList,scrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,scrollPane.HORIZONTAL_SCROLLBAR_NEVER, true);
+//      scrollPane = new CustomJScrollPane(jlFriendsList);
       scrollPane.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 0, new Color(230, 230, 230)));
 
       this.add(pSearch, "North");
@@ -205,9 +205,9 @@ public class ChattingRoomListPanel extends JPanel {
       public FriendsListCellRenderer() {
          Border border = this.getBorder();
          Border margin = new EmptyBorder(5, 15, 5, 10);
-         this.setLayout(new BorderLayout(10, 10)); //간격 조정이 되버림(확인필요)
+         this.setLayout(new BorderLayout(0, 0)); //간격 조정이 되버림(확인필요)
          this.setBorder(new CompoundBorder(border, margin));
-         this.setPreferredSize(new Dimension(378, 95));
+         this.setPreferredSize(new Dimension(370, 80));
          
          lbName.setFont(new Font("Malgun Gothic", Font.BOLD, 13));
          lbStatMsg.setFont(new Font("Malgun Gothic", Font.PLAIN, 10));

@@ -246,7 +246,8 @@ public class FriendsListPanel extends JPanel {
 			Border margin = new EmptyBorder(5, 15, 5, 10);
 			this.setLayout(new BorderLayout(10, 10)); //간격 조정이 되버림(확인필요)
 			this.setBorder(new CompoundBorder(border, margin));
-			
+	        this.setPreferredSize(new Dimension(370, 80));
+
 			lbName.setFont(new Font("Malgun Gothic", Font.BOLD, 13));
 			lbStatMsg.setFont(new Font("Malgun Gothic", Font.PLAIN, 10));
 			lbStatMsg.setBorder(new EmptyBorder(0, 10, 0, 10));
