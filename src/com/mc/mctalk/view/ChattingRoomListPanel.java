@@ -127,8 +127,8 @@ public class ChattingRoomListPanel extends JPanel {
          //getClickCount가 2 이상이면 더블클릭으로 판단함 && 선택된 인덱스가 -1이면 제대로된 선택이 아님
          if(e.getClickCount() >= 2 && jlFriendsList.getSelectedIndex() != -1){
             //선택된 친구ID와 로그인 ID를 매개변수로 컨트롤러 호출
-				ChattingRoomVO vo = (ChattingRoomVO)jlFriendsList.getSelectedValue();
-				new ChattingController(client).openChattingRoom(vo.getChattingRoomID());
+			ChattingRoomVO vo = (ChattingRoomVO)jlFriendsList.getSelectedValue();
+			new ChattingController(client).openChattingRoom(vo.getChattingRoomID());
          }
       }
       public void mouseReleased(MouseEvent arg0) {}
@@ -216,7 +216,7 @@ public class ChattingRoomListPanel extends JPanel {
          
          lastMsgTime.setFont(new Font("Monospaced",Font.PLAIN, 12));
          lastMsgTime.setForeground(Color.lightGray);
-         lbName.setPreferredSize(new Dimension(400000, 500));
+         lbName.setPreferredSize(new Dimension(150, 500));
          lbStatMsg.setPreferredSize(new Dimension(220, 0));
 //         lastMsgTime.setPreferredSize(new Dimension(0, 0));
          unreadmsg.setPreferredSize(new Dimension(30, 0));
@@ -224,7 +224,7 @@ public class ChattingRoomListPanel extends JPanel {
          
          
          
-         panelText = new JPanel(new GridLayout(1,2));
+         panelText = new JPanel(new GridLayout(2,2));
          panelText.setBorder(new EmptyBorder(15, 10, 15, 0));
 //         panelText.setPreferredSize(new Dimension(50, 100));
          
@@ -338,8 +338,8 @@ public class ChattingRoomListPanel extends JPanel {
          
          
          
-         if(vo.getChattingRoomName().length()>20){
-            lbName.setText(vo.getChattingRoomName().substring(0, 19)+"...");
+         if(vo.getChattingRoomName().length()>15){
+            lbName.setText(vo.getChattingRoomName().substring(0,14)+"...");
             
          }else{
             lbName.setText(vo.getChattingRoomName());
@@ -385,16 +385,20 @@ public class ChattingRoomListPanel extends JPanel {
               brank.setBackground(list.getSelectionBackground());
               brank1.setBackground(list.getSelectionBackground());
               brank2.setBackground(list.getSelectionBackground());
+              uppanel.setBackground(list.getSelectionBackground());
+              downpanel.setBackground(list.getSelectionBackground());
               
               setBackground(list.getSelectionBackground());
           } else { 
              lbImgIcon.setBackground(list.getBackground());
-//             lbName.setBackground(list.getBackground());
+             lbName.setBackground(list.getBackground());
              lbStatMsg.setBackground(list.getBackground());
               panelText.setBackground(list.getBackground());
-//              brank.setBackground(list.getBackground());
+              brank.setBackground(list.getBackground());
               brank1.setBackground(list.getBackground());
               brank2.setBackground(list.getBackground());
+              uppanel.setBackground(list.getBackground());
+              downpanel.setBackground(list.getBackground());
               setBackground(list.getBackground());
           }
           
