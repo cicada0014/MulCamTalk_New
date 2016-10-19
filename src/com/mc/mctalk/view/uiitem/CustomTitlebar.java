@@ -27,11 +27,15 @@ public class CustomTitlebar extends JPanel{
 	private JButton btnMinimize, btnClose;
 	private JFrame frame;
 	private ChattingClient client;
-	
-	public CustomTitlebar(JFrame frame, ChattingClient client){
+	private boolean isMainFrame =false;
+	private JLabel lblTitle = new JLabel("<html><font color='white'>mulcam<b>talk<b></font></html>");
+	public void setLblTitle(JLabel lblTitle) {
+		this.lblTitle = lblTitle;
+	}
+	public CustomTitlebar(JFrame frame, ChattingClient client, boolean isMainFrame){
 		this.frame = frame;
 		this.client = client;
-
+		this.isMainFrame = isMainFrame;
 		this.setBorder(new EmptyBorder(0, 0, 0, 0));
 		this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		this.setBackground(new Color(82, 134, 198));
@@ -47,7 +51,7 @@ public class CustomTitlebar extends JPanel{
 		pButton.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
 		//커스텀 타이틀바 - 타이틀 설정
-		JLabel lblTitle = new JLabel("<html><font color='white'>mulcam<b>talk<b></font></html>");
+		
 		lblTitle.setFont(new Font("Malgun Gothic", Font.PLAIN, 16));
 		pTitle.add(lblTitle);
 		
@@ -82,7 +86,10 @@ public class CustomTitlebar extends JPanel{
 		this.addMouseListener(frameDragListener);
 		this.addMouseMotionListener(frameDragListener);
 	}
-	
+//	public CustomTitlebar(JFrame frame , ChattingClient client, boolean isSubFrame){
+//		this(frame, client);
+//		
+//	}
 	//버튼 리스너
 	class TitleButtonActionListener implements ActionListener{
 		@Override
@@ -92,7 +99,11 @@ public class CustomTitlebar extends JPanel{
 				frame.setExtendedState(JFrame.ICONIFIED);
 			}else if(button == btnClose){
 				if(client != null) client.stopClient();
-				frame.dispose();
+				if(isMainFrame=false){
+					frame.dispose();
+				}else{
+					System.exit(0);
+				}
 //				int isExit = JOptionPane.showConfirmDialog(getContentPane(), "종료하시겠습니까?", "종료", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null);
 //    			if(isExit==0){
 //    				System.exit(0);

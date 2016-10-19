@@ -71,7 +71,7 @@ public class MainFrame extends JFrame {
 		new LogoManager().setLogoFrame(this);
 		//기본 타이틀바 제거 및 CustomTitlebar 추가
 		this.setUndecorated(true);
-		CustomTitlebar pTitlebar = new CustomTitlebar(this, client);
+		CustomTitlebar pTitlebar = new CustomTitlebar(this, client,true);
 
 		//* add
 		pCover.add(pTitlebar);

@@ -270,6 +270,8 @@ public class UserDAO {
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		UserVO vo = null;
+		int friendIndex = 0;
+
 		try{
 			conn = JDBCUtil.getConnection();
 			stmt = conn.prepareStatement(searchAllFriendsSQL);
@@ -282,6 +284,8 @@ public class UserDAO {
 				vo.setUserName(rst.getString("user_name"));
 				vo.setUserImgPath(rst.getString("user_pf_img_path"));
 				vo.setUserMsg(rst.getString("user_msg"));
+				vo.setSelectedIndex(friendIndex);
+				friendIndex++;
 				friendsMap.put(vo.getUserID(), vo);
 			}
 //			System.out.println("searchFriend() : " + friendsList.size());

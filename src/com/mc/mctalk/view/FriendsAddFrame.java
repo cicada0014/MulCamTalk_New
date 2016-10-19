@@ -86,7 +86,7 @@ public class FriendsAddFrame extends JFrame {
 		
 		this.setLocation(300, 500);
 		this.setUndecorated(true);
-		title = new CustomTitlebar(this, null);
+		title = new CustomTitlebar(this, client, false);
 		title.setBounds(0, 0, 300, 36);
 		add(title);
 		

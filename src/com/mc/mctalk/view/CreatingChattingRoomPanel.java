@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
@@ -29,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -36,12 +38,13 @@ import javax.swing.border.LineBorder;
 import com.mc.mctalk.chatserver.ChattingClient;
 import com.mc.mctalk.chatserver.ChattingController;
 import com.mc.mctalk.view.uiitem.CustomJScrollPane;
+import com.mc.mctalk.view.uiitem.CustomTitlebar;
 import com.mc.mctalk.view.uiitem.RoundedImageMaker;
 import com.mc.mctalk.vo.UserVO;
 
 public class CreatingChattingRoomPanel extends JFrame {
 	private RoundedImageMaker imageMaker = new RoundedImageMaker();
-	private JPanel topPanel = new JPanel();
+	private JPanel entirePanel = new JPanel();
 	private JPanel middlePanel = new JPanel();
 	private JPanel bottomPanel = new JPanel();
 	private CustomJScrollPane ChoiceFriendListScrollPanel ;
@@ -64,6 +67,7 @@ public class CreatingChattingRoomPanel extends JFrame {
 	private Font grayFont = new Font("dialog", Font.BOLD, 12);
 	private ChattingClient client;
 	private MainFrame mainFrame;
+	private	JPanel panelAdd = new JPanel();
 	public CreatingChattingRoomPanel(ChattingClient client, MainFrame mainFrame) {
 		this.client = client;
 		this.mainFrame = mainFrame;
@@ -71,22 +75,23 @@ public class CreatingChattingRoomPanel extends JFrame {
 		// frame setting
 		this.setBackground(backGraundColor);
 		this.setSize(520, 430);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 현재 창만 꺼지도록
-		// this.setUndecorated(true);
-		this.add(topPanel, BorderLayout.NORTH);
-		this.add(middlePanel, BorderLayout.CENTER);
-		this.add(bottomPanel, BorderLayout.SOUTH);
-		topPanel.setBackground(backGraundColor);
-		topPanelLabel.setBackground(backGraundColor);
-		topCountLabel.setBackground(backGraundColor);
+		this.setUndecorated(true);
+		CustomTitlebar titleBar = new CustomTitlebar(this, client, false);
+//		titleBar.setPreferredSize(new Dimension(520, 36));
+		entirePanel.setBorder(BorderFactory.createLineBorder(new Color(82, 134, 198)));
+		entirePanel.setLayout(new BoxLayout(entirePanel, BoxLayout.Y_AXIS));
+		entirePanel.add(titleBar);
+		entirePanel.add(panelAdd);
+		entirePanel.add(middlePanel);
+		entirePanel.add(bottomPanel);
 		middlePanel.setBackground(backGraundColor);
+		middlePanel.setPreferredSize(new Dimension(520, 300));
 		bottomPanel.setBackground(backGraundColor);
 		middleSelectedFriendListPanel.setBackground(backGraundColor);
 		// topPanel setting
-		topPanel.setLayout(new BorderLayout());
-		JPanel panelAdd = new JPanel();
 		panelAdd.setBackground(backGraundColor);
-		topPanel.add(panelAdd, BorderLayout.CENTER);
+		this.add(entirePanel);
+		
 		panelAdd.add(topPanelLabel);
 		panelAdd.add(topCountLabel);
 		closeBtn.setBackground(backGraundColor);
@@ -106,6 +111,24 @@ public class CreatingChattingRoomPanel extends JFrame {
 		// 크기 설정하려면 서치패널에 있는 크기를 필수적으로 줄여주어야 한다....
 		selectedList = new JList<>(listmodel);
 		selectedList.setCellRenderer(new FriendsListCellRenderer());
+		selectedList.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {
+			}
+			public void mousePressed(MouseEvent e) {
+			}
+			public void mouseExited(MouseEvent e) {
+			}
+			public void mouseEntered(MouseEvent e) {
+			}
+			public void mouseClicked(MouseEvent e) {
+				// 오른쪽 선택된 리스트 선택시 왼쪽 리스트 선택 해제. 
+				System.out.println(selectedList.getSelectedValue().getSelectedIndex());
+				friendListPannel.getJlFriendsList().getSelectionModel().removeSelectionInterval(
+						selectedList.getSelectedValue().getSelectedIndex(), selectedList.getSelectedValue().getSelectedIndex());
+				listmodel.remove(selectedList.getSelectedIndex());// 오른쪽 선택 값 삭제 
+				friendListPannel.getSelectedFriends().remove(selectedList.getSelectedValue());// 오른쪽 선택된 친구들의 값이 지워짐에 따라 왼쪽 선택값 삭
+			}
+		});
 		ChoiceFriendListScrollPanel = new CustomJScrollPane(selectedList, CustomJScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				CustomJScrollPane.HORIZONTAL_SCROLLBAR_NEVER, true);
 		ChoiceFriendListScrollPanel.setBorder(null);
@@ -257,7 +280,6 @@ public class CreatingChattingRoomPanel extends JFrame {
 				lbCloseBtn.setBackground(selectedColor1);
 				setBackground(backGraundColor);
 			}
-
 			return this;
 		}
 	}
