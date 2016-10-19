@@ -21,7 +21,7 @@ public class UserDAO {
 												+ "order by user_name";
 	private String memberJoinSQL =  "insert into users (user_id,user_pw,user_name,user_sex,user_birthday,user_joindate) "
 			+ "values(?,?,?,?,now(),now()) ";
-	private String memberSearchSQL = "SELECT user_id, user_name, user_pf_img_path "
+	private String memberSearchSQL = "SELECT user_id, user_name, user_pf_img_path, user_msg "
 			+"from users " 
 			+"WHERE user_id NOT IN (SELECT rel_user_id from user_relation WHERE user_id = ?) "
 			+"and user_id != ? "
@@ -133,6 +133,10 @@ public class UserDAO {
 				vo.setUserID(rst.getString("user_id"));
 				vo.setUserName(rst.getString("user_name"));
 				vo.setUserImgPath(rst.getString("user_pf_img_path"));
+				if(rst.getString("user_msg") != null)
+				{
+					vo.setUserMsg(rst.getString("user_msg"));
+				}
 				searchMap.put(vo.getUserID(), vo);
 			}
 		} catch (SQLException e) {
@@ -160,6 +164,7 @@ public class UserDAO {
 															// 사전 확보
 			stmt.setString(1, loginId); //등록할 ID
 			stmt.setString(2, addId); //추가할 친구 ID(FriendsAddFrame의 listModel에서 rel_user_id만 따서 매개변수로 사용
+//			stmt.setString(3, vo.getUserJoinDate());
 			rst = stmt.executeUpdate(); // 쿼리 Execute
 
 			System.out.println(rst);

@@ -54,8 +54,6 @@ import com.mc.mctalk.vo.UserVO;
  */
 
 public class FriendsAddFrame extends JFrame {	
-	private JFrame f = new JFrame();
-	
 	private JPanel firstPanel = new JPanel(); //윗 패널
 	private JLabel addLabel = new JLabel("검색할 이름을 입력하시오.");
 	private JTextField nameField = new JTextField();
@@ -74,64 +72,19 @@ public class FriendsAddFrame extends JFrame {
 	private ChattingClient client;
 	
 	private SearchPanel sPanel;
+	private CustomTitlebar title;
+	private MainFrame mainFrame;
 	
-	public FriendsAddFrame(){
-		initPanel();
-		
-		this.setLocation(500, 500);
-		this.setUndecorated(true);
-		CustomTitlebar title = new CustomTitlebar(this, null);
-		title.setBounds(0, 0, 300, 36);
-		add(title);
-		
-		//상단 패널
-		firstPanel.add(addLabel);
-		firstPanel.add(nameField);
-//		firstPanel.add(searchBtn);
-		nameField.setPreferredSize(new Dimension(270, 30));
-//		searchBtn.addActionListener(new MemberSearchListener());
-		nameField.addKeyListener(new MemberSearchListener());
-//		searchBtn.setPreferredSize(new Dimension(270, 30));
-		firstPanel.setPreferredSize(new Dimension(300, 100));
-		add(firstPanel, BorderLayout.NORTH);
-		
-		//가운데 패널에 넣을 검색 리스트, 스크롤 세팅
-		listScroll.setViewportView(searchList);
-		listScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		searchList.setCellRenderer(new FriendsListCellRenderer());
-		searchList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		searchList.setListData(searchUser);
-		
-		//가운데 패널
-		secondPanel.add(listScroll);
-//		secondPanel.setPreferredSize(new Dimension(300, 200));
-		listScroll.setViewportView(searchList);
-		listScroll.setPreferredSize(new Dimension(270, 150));
-		searchList.setPreferredSize(new Dimension(250, 150));
-		add(secondPanel, BorderLayout.CENTER);
-		
-		//하단 패널
-		thirdPanel.add(addBtn);
-		addBtn.setPreferredSize(new Dimension(270, 30));
-		addBtn.addActionListener(new MemberAddListener());
-		add(thirdPanel, BorderLayout.SOUTH);
-		
-		this.setTitle("친구 추가");
-		this.setSize(300, 360);
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setResizable(false);
-		this.setVisible(true);
-	}
-	
-	public FriendsAddFrame(ChattingClient client)
+	public FriendsAddFrame(ChattingClient client, MainFrame mainFrame)
 	{
 		this.client = client;
+		this.mainFrame = mainFrame;
 		initPanel();
 		setLayout(null);
 		
 		this.setLocation(300, 500);
 		this.setUndecorated(true);
-		CustomTitlebar title = new CustomTitlebar(this, null);
+		title = new CustomTitlebar(this, null);
 		title.setBounds(0, 0, 300, 36);
 		add(title);
 		
@@ -142,7 +95,7 @@ public class FriendsAddFrame extends JFrame {
 		nameField.setPreferredSize(new Dimension(270, 30));
 //		searchBtn.addActionListener(new MemberSearchListener());
 //		searchBtn.setPreferredSize(new Dimension(270, 30));
-		firstPanel.setPreferredSize(new Dimension(300, 100));
+//		firstPanel.setPreferredSize(new Dimension(300, 100));
 		add(firstPanel);
 		firstPanel.setBounds(0, 40, 300, 60);
 		
@@ -151,7 +104,6 @@ public class FriendsAddFrame extends JFrame {
 		listScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		searchList.setCellRenderer(new FriendsListCellRenderer());
 		searchList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		searchList.setListData(searchUser);
 		
 		//가운데 패널
 		secondPanel.add(listScroll);
@@ -161,7 +113,6 @@ public class FriendsAddFrame extends JFrame {
 		searchList.setPreferredSize(new Dimension(250, 200));
 		add(secondPanel);
 		secondPanel.setBounds(0, 100, 300, 200);
-		revalidate();
 		
 		//하단 패널
 		thirdPanel.add(addBtn);
@@ -220,7 +171,7 @@ public class FriendsAddFrame extends JFrame {
 				}
 			}
 		}
-		System.out.println(listModel);
+//		System.out.println(listModel);
 	}
 	
 	public void setNameField(JTextField nameField)
@@ -249,24 +200,6 @@ public class FriendsAddFrame extends JFrame {
 	{
 		return mapFriends;
 	}
-	
-	//버튼 이벤트
-//	class MemberSearchListener implements ActionListener {
-//
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			// TODO Auto-generated method stub
-//
-//			UserDAO udo = new UserDAO();
-//			UserVO vo = new UserVO();
-//			mapFriends = new LinkedHashMap<String, UserVO>();
-//			mapFriends = udo.SearchMember(client.getLoginUserVO().getUserID(), nameField.getText().toString());
-//			searchFriendsMap();
-//			addElementToJList();
-//			System.out.println(listModel);
-//		}
-//		
-//	}
 	
 	public void searchEvent()
 	{
@@ -335,11 +268,8 @@ public class FriendsAddFrame extends JFrame {
 			System.out.println("addID : " + userId);
 			udo.AddFriend(client.getLoginUserVO().getUserID(), userId);
 			
-			MainFrame mf = new MainFrame(client);
-			mf.changePanel("friendsList");
-			mf.repaint();
-			
 			listModel.removeElementAt(searchList.getSelectedIndex());
+			mainFrame.changePanel("friendsList");
 		}
 	}
 	
