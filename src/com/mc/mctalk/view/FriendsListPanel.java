@@ -274,6 +274,8 @@ public class FriendsListPanel extends JPanel {
 			lbName.setText(vo.getUserName());
 			if(vo.getUserMsg() != null ){
 				lbStatMsg.setText(vo.getUserMsg());
+			}else{
+				lbStatMsg.setText(null);
 			}
 			
 			//투명도 설정
