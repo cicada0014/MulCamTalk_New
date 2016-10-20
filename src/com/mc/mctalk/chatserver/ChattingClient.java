@@ -173,7 +173,7 @@ public class ChattingClient {
 		htChattingGUI.remove(roomID);
 	}
 	
-	public MainFrame getHtChattingListPanel(String loginID) {
+	public MainFrame getHtMainFrame(String loginID) {
 		MainFrame returnCrp = htMainFrame.get(loginID);
 		return returnCrp;
 	}

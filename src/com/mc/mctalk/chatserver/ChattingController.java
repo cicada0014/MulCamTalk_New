@@ -85,6 +85,8 @@ public class ChattingController {
 			ChattingRoomVO roomVO = dao.getChatRoomVO(roomID);
 			ChattingFrame cf = new ChattingFrame(client, roomVO);
 			cf.loadMessageHistory();
+			dao.deleteUnReadMsg(client.getLoginUserVO().getUserID(),roomID);
+			client.getHtMainFrame(client.getLoginUserVO().getUserID()).changePanel("chattingList");
 		} else {
 			openedChattingGUI.requestFocus();
 			openedChattingGUI.setState(java.awt.Frame.NORMAL);

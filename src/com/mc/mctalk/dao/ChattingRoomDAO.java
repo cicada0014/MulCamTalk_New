@@ -85,6 +85,8 @@ public class ChattingRoomDAO {
 															 + "FROM messages ms "
 															 + "WHERE room_id = ? " 
 															 + "ORDER BY msg_sent_time asc, msg_id asc ";
+	private String deleteUnreadMessageSQL = "DELETE FROM disconn_client WHERE disconn_client_id = ? AND msg_id in (select msg_id from messages where room_id = ?) ";
+	
 	
 	//접속하지 않은 유저에게 메시지 전송시 관련 정보 입력
 	public void insertDiconnClient(String msg_id, String disconnClient){
@@ -328,41 +330,6 @@ public class ChattingRoomDAO {
 	}
 	
 	//채팅 방 한개에 대한 메시지 이력 불러오기
-	public Map<String, MessageVO> getChatRoomMessageMap(String roomID){
-		System.out.println(TAG + "getChatRoomMessages()");
-		
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rst = null;
-		Map<String, MessageVO> MessageVOMap = new LinkedHashMap<String, MessageVO>();
-
-		try{
-			conn = JDBCUtil.getConnection();
-			stmt = conn.prepareStatement(getChatRoomMessagesSQL);
-			stmt.setString(1, roomID);
-			rst = stmt.executeQuery();
-
-			while (rst.next()) {
-				MessageVO messageVO = new MessageVO(); 
-				ChattingRoomVO roomVO = new ChattingRoomVO(); 
-				roomVO.setChattingRoomID(rst.getString(1));
-				messageVO.setRoomVO(roomVO);
-				messageVO.setMessageID(rst.getString(2));
-				messageVO.setSendUserID(rst.getString(3));
-				messageVO.setSendUserName(rst.getString(4));
-				messageVO.setMessage(rst.getString(5));
-				messageVO.setSendTime(rst.getString(6));
-				MessageVOMap.put(rst.getString(2), messageVO);
-			}
-			
-		}catch(SQLException e){
-			System.out.println("addUserToChattingRoom e : " + e);
-		}finally {
-			JDBCUtil.close(rst,stmt, conn);
-		}
-		return MessageVOMap;
-	}
-	
 	public ArrayList<MessageVO> getChatRoomMessageArray(String roomID){
 		System.out.println(TAG + "getChatRoomMessages()");
 		
@@ -396,5 +363,32 @@ public class ChattingRoomDAO {
 			JDBCUtil.close(rst,stmt, conn);
 		}
 		return MessageVOArray;
+	}
+
+	public void deleteUnReadMsg(String userID, String roomID) {
+		System.out.println(TAG + "deleteUnReadMsg()");
+
+		int result = 0;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+
+		try {
+			conn = JDBCUtil.getConnection();
+			stmt = conn.prepareStatement(deleteUnreadMessageSQL);
+			stmt.setString(1, userID);
+			stmt.setString(2, roomID);
+			result = stmt.executeUpdate();
+
+			System.out.println("딜리트 결과 : " + result);
+			if (result > 0) {
+				System.out.println("unread message delete success");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(rst, stmt, conn);
+		}
 	}
 }
