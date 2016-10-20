@@ -61,6 +61,7 @@ public class CreatingChattingRoomPanel extends JFrame {
 	private DefaultListModel<UserVO> listmodel = new DefaultListModel<>();
 	private JLabel topPanelLabel = new JLabel();
 	private JLabel topCountLabel = new JLabel("" + count);
+	private JPanel titlepanel = new JPanel();
 	private static int count = 0;
 	private Color backGraundColor = new Color(255, 255, 255);
 	private Color selectedColor1 = new Color(64, 224, 208); // 아름다운 푸른색 찾아보기.
@@ -77,10 +78,13 @@ public class CreatingChattingRoomPanel extends JFrame {
 		this.setSize(520, 430);
 		this.setUndecorated(true);
 		CustomTitlebar titleBar = new CustomTitlebar(this, client, false);
-//		titleBar.setPreferredSize(new Dimension(520, 36));
+		titleBar.setPreferredSize(new Dimension(520, 35));
 		entirePanel.setBorder(BorderFactory.createLineBorder(new Color(82, 134, 198)));
 		entirePanel.setLayout(new BoxLayout(entirePanel, BoxLayout.Y_AXIS));
-		entirePanel.add(titleBar);
+		titlepanel.setLayout(new BorderLayout());
+		titlepanel.add(titleBar, BorderLayout.NORTH);
+		titlepanel.setBackground(backGraundColor);
+		entirePanel.add(titlepanel);
 		entirePanel.add(panelAdd);
 		entirePanel.add(middlePanel);
 		entirePanel.add(bottomPanel);
