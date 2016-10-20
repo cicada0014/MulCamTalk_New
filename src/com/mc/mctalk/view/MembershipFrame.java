@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +33,7 @@ import javax.swing.border.Border;
 import org.jdesktop.swingx.prompt.PromptSupport;
 import com.mc.mctalk.dao.UserDAO;
 import com.mc.mctalk.view.uiitem.CustomTitlebar;
+import com.mc.mctalk.view.uiitem.LogoManager;
 import com.mc.mctalk.vo.UserVO;
 
 /**
@@ -96,7 +98,7 @@ public class MembershipFrame extends JFrame {
 	// 프레임 생성자
 	public MembershipFrame() {
 		// frame setting
-		
+		new LogoManager().setLogoFrame(this);
 		this.setUndecorated(true);
 		panels.add(titlepanel);
 		panels.add(logoPanel);
@@ -141,8 +143,9 @@ public class MembershipFrame extends JFrame {
 		idPanel.add(idfield);
 		idfield.setPreferredSize(new Dimension(140, 27));
 		idDuplicationBtn.setPreferredSize(new Dimension(70, 27));
-		idDuplicationBtn.setFont(new Font("dialog", Font.PLAIN, 10));
+		idDuplicationBtn.setFont(new Font("맑은 고딕", Font.PLAIN, 10));
 		idDuplicationBtn.setText("중복확인");
+		idDuplicationBtn.setMargin(new Insets(0, 0, 0, 0));
 		idDuplicationBtn.addActionListener(new idDuplicationCheck());
 		idPanel.add(idDuplicationBtn);
 		// password panel setting( 3 panel)

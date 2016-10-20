@@ -1,12 +1,21 @@
 package com.mc.mctalk.view.uiitem;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
+
+import org.jdesktop.swingx.prompt.PromptSupport;
 
 import com.mc.mctalk.dao.UserDAO;
 
@@ -15,6 +24,10 @@ public class PwFindDialog extends JDialog {
 	private JTextField inputPhoneNum = new JTextField(10);
 	private JButton checkBtn = new JButton("확인");
 	private JButton cancelBtn = new JButton("취소");
+	private JPanel backColorPanel = new JPanel();
+	private Font font = new Font("맑은 고딕", Font.PLAIN, 10);
+	private LineBorder btnBorder = new LineBorder(Color.WHITE);
+	private JLabel title = new JLabel("비밀번호 찾기");
 
 	private findPwEmpty findPwEmp;
 	private findPwFailed fpf;
@@ -22,33 +35,62 @@ public class PwFindDialog extends JDialog {
 
 	public PwFindDialog() {
 
+		Dimension frameSize = this.getSize();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation((screenSize.width - frameSize.width - 300) / 2,
+				(screenSize.height - frameSize.height - 600) / 2);
+
 		setLayout(null);
 
-		inputId.setBounds(50, 50, 150, 20);
+		title.setBounds(90, 15, 100, 20);
+		title.setForeground(Color.WHITE);
+		add(title);
+		inputId.setBorder(BorderFactory.createEmptyBorder());
+		PromptSupport.setPrompt("계정", inputId);
+		inputId.setBounds(50, 40, 150, 20);
 		add(inputId);
-		inputPhoneNum.setBounds(50, 95, 150, 20);
-		add(inputPhoneNum);
-		checkBtn.setBounds(50, 130, 70, 30);
-		add(checkBtn);
-		checkBtn.addActionListener(new pwFindListener());
-		cancelBtn.setBounds(130, 130, 70, 30);
-		add(cancelBtn);
-		cancelBtn.addActionListener(new ActionListener() {
 
+		inputPhoneNum.setBorder(BorderFactory.createEmptyBorder());
+		PromptSupport.setPrompt("폰번호", inputPhoneNum);
+		inputPhoneNum.setBounds(50, 75, 150, 20);
+		add(inputPhoneNum);
+
+		checkBtn.setContentAreaFilled(false);
+		checkBtn.setForeground(Color.WHITE);
+		checkBtn.setFont(font);
+		checkBtn.setBorder(btnBorder);
+		checkBtn.setBounds(50, 110, 70, 30);
+		add(checkBtn);
+
+		cancelBtn.setContentAreaFilled(false);
+		cancelBtn.setForeground(Color.WHITE);
+		cancelBtn.setFont(font);
+		cancelBtn.setBorder(btnBorder);
+		cancelBtn.setBounds(130, 110, 70, 30);
+		add(cancelBtn);
+
+		cancelBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-
 			}
 		});
 
-		setSize(250, 250);
+		Color backColor = new Color(82, 134, 198);
+		backColorPanel.setBackground(backColor);
+		backColorPanel.setBounds(0, 0, 250, 200);
+		add(backColorPanel);
+
+		setSize(250, 200);
 		setModal(true);
 		setVisible(true);
 		setResizable(false);
-		setTitle("비밀번호 찾기");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+	}
+
+	public static void main(String[] args) {
+		PwFindDialog pf = new PwFindDialog();
 	}
 
 	class pwFindListener implements ActionListener {
@@ -56,8 +98,7 @@ public class PwFindDialog extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			if (e.getSource() == checkBtn)
-				;
+			if (e.getSource() == checkBtn);
 			String ID = inputId.getText();
 			System.out.println(ID);
 			String phoneNum = inputPhoneNum.getText();
