@@ -323,8 +323,14 @@ public class ChattingRoomListPanel extends JPanel {
             
             unreadmsg.setIcon(unreadIcon);
             unreadmsg.setForeground(Color.white);
-            unreadmsg.setText(vo.getUnReadMsgCount()+"");
-            unreadmsg.setIconTextGap(-12);
+            if(vo.getUnReadMsgCount()<=9){
+                unreadmsg.setIconTextGap(-12);
+                unreadmsg.setText(vo.getUnReadMsgCount()+"");
+                
+             }else{
+                unreadmsg.setIconTextGap(-16);
+                unreadmsg.setText(vo.getUnReadMsgCount()+"");
+             }
             
          }else{
             unreadmsg.setIcon(null);
