@@ -2,8 +2,10 @@ package com.mc.mctalk.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -66,10 +69,9 @@ public class MembershipFrame extends JFrame {
 	private JButton join = new JButton("가입하기");
 	private JButton closebtn = new JButton("가입취소");
 	private Font grayFont = new Font("dialog", Font.BOLD, 12);
-	private Color backGroundColor = new Color(82, 134, 198);
+	private Color backGroundColor = new Color(255, 255, 255);
 	private Dimension fieldSize = new Dimension(215, 27);
 	private joinResult joincomplete = new joinResult();
-	private ImageIcon tokLogo = new ImageIcon("images/membershipLogo.png");
 	private CheckPassword checkPassword = new CheckPassword();
 	private ActionCheckManSexBox checkManSex = new ActionCheckManSexBox();
 	private ActionCheckWomanSexBox checkWomanSex = new ActionCheckWomanSexBox();
@@ -94,6 +96,7 @@ public class MembershipFrame extends JFrame {
 	// 프레임 생성자
 	public MembershipFrame() {
 		// frame setting
+		
 		this.setUndecorated(true);
 		panels.add(titlepanel);
 		panels.add(logoPanel);
@@ -114,16 +117,17 @@ public class MembershipFrame extends JFrame {
 			mainPanel.add(panel);
 			panel.setBackground(backGroundColor);
 		}
+		titlepanel.setBackground(new Color(84, 134, 198));
 		titlepanel.add(titleBar);
+		titlepanel.setPreferredSize(new Dimension(380, 36));
 		titleBar.setSize(new Dimension(380, 36));
 		titleBar.setPreferredSize(titleBar.getSize());
 		// logo panel setting(1 panel)
 		JLabel logoLabel = new JLabel();
-		logoPanel.add(logoLabel);
-		
-		logoPanel.setSize(380, 120);
+		logoPanel.add(logoLabel); 
+		logoLabel.setIcon(new ImageIcon("images/memberLogo.png"));
+		logoPanel.setSize(380, 130);
 		logoPanel.setPreferredSize(logoPanel.getSize());
-		logoLabel.setIcon(tokLogo);
 		/// id panel setting(2 panel)
 		idfield.setLocation(5, 5);
 		PromptSupport.setPrompt(id, idfield);
@@ -137,7 +141,7 @@ public class MembershipFrame extends JFrame {
 		idPanel.add(idfield);
 		idfield.setPreferredSize(new Dimension(140, 27));
 		idDuplicationBtn.setPreferredSize(new Dimension(70, 27));
-		idDuplicationBtn.setFont(new Font("dialog", Font.PLAIN, 9));
+		idDuplicationBtn.setFont(new Font("dialog", Font.PLAIN, 10));
 		idDuplicationBtn.setText("중복확인");
 		idDuplicationBtn.addActionListener(new idDuplicationCheck());
 		idPanel.add(idDuplicationBtn);
@@ -162,6 +166,7 @@ public class MembershipFrame extends JFrame {
 		PromptSupport.setPrompt("비밀번호 확인", passwordCheckfield);
 		// error check panel setting (5panel)
 		overlapCheckPanel.add(errorCheck);
+		errorCheck.setBorder(BorderFactory.createEmptyBorder(0, 0, 3, 0));
 		overlapCheckPanel.setSize(380, 20);
 		overlapCheckPanel.setPreferredSize(overlapCheckPanel.getSize());
 		// name and checkbox panel setting(6panel)
