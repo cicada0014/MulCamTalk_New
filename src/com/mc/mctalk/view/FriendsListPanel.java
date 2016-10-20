@@ -108,7 +108,8 @@ public class FriendsListPanel extends JPanel {
 		jlFriendsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jlFriendsList.addMouseListener(selectionListener);
 		
-		scrollPane = new CustomJScrollPane(jlFriendsList);
+		scrollPane = new CustomJScrollPane(jlFriendsList,scrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,scrollPane.HORIZONTAL_SCROLLBAR_NEVER, true);
+
 		scrollPane.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 0, new Color(230, 230, 230)));
 
 		this.add(pSearch, "North");
