@@ -53,7 +53,7 @@ import com.mc.mctalk.vo.UserVO;
  * 				3) 카톡 창 참고해서 깔끔하고 이쁘게 만들어 주세요~~^^ㅋㅋㅋ
  */
 
-public class FriendsAddFrame extends JFrame {	
+public class FriendsAddFrame extends JFrame {
 	private JPanel firstPanel = new JPanel(); //윗 패널
 	private JLabel addLabel = new JLabel("검색할 이름을 입력하시오.");
 	private JTextField nameField = new JTextField();
@@ -75,8 +75,6 @@ public class FriendsAddFrame extends JFrame {
 	private CustomTitlebar title;
 	private MainFrame mainFrame;
 	
-	private int count = 0;
-	
 	public FriendsAddFrame(ChattingClient client, MainFrame mainFrame)
 	{
 		this.client = client;
@@ -84,7 +82,7 @@ public class FriendsAddFrame extends JFrame {
 		initPanel();
 		setLayout(null);
 		
-		this.setLocation(300, 500);
+		this.setLocation(600, 250);
 		this.setUndecorated(true);
 		title = new CustomTitlebar(this, client, false);
 		title.setBounds(0, 0, 300, 36);
@@ -93,13 +91,10 @@ public class FriendsAddFrame extends JFrame {
 		//상단 패널
 		firstPanel.add(addLabel);
 		firstPanel.add(nameField);
-//		firstPanel.add(searchBtn);
 		nameField.setPreferredSize(new Dimension(270, 30));
-//		searchBtn.addActionListener(new MemberSearchListener());
-//		searchBtn.setPreferredSize(new Dimension(270, 30));
-//		firstPanel.setPreferredSize(new Dimension(300, 100));
 		add(firstPanel);
-		firstPanel.setBounds(0, 40, 300, 60);
+		firstPanel.setBounds(0, 36, 300, 64);
+		firstPanel.setBackground(Color.WHITE);
 		
 		//가운데 패널에 넣을 검색 리스트, 스크롤 세팅
 		listScroll.setViewportView(searchList);
@@ -109,19 +104,19 @@ public class FriendsAddFrame extends JFrame {
 		
 		//가운데 패널
 		secondPanel.add(listScroll);
-//		secondPanel.setPreferredSize(new Dimension(300, 150));
 		listScroll.setViewportView(searchList);
-//		listScroll.setPreferredSize(new Dimension(270, 200));
 		searchList.setPreferredSize(new Dimension(250, 600));
 		add(secondPanel);
 		secondPanel.setBounds(0, 100, 300, 200);
+		secondPanel.setBackground(Color.WHITE);
 		
 		//하단 패널
 		thirdPanel.add(addBtn);
 		addBtn.setPreferredSize(new Dimension(270, 30));
 		addBtn.addActionListener(new MemberAddListener());
 		add(thirdPanel);
-		thirdPanel.setBounds(0, 300, 300, 50);
+		thirdPanel.setBounds(0, 300, 300, 60);
+		thirdPanel.setBackground(Color.WHITE);
 		
 		this.setTitle("친구 추가");
 		this.setSize(300, 360);
@@ -173,7 +168,6 @@ public class FriendsAddFrame extends JFrame {
 				}
 			}
 		}
-		count = listModel.getSize();
 	}
 	
 	public void setNameField(JTextField nameField)
