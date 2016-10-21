@@ -279,7 +279,6 @@ public class MembershipFrame extends JFrame {
 	class idDuplicationCheck implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if (idfield.getText().equals("")) {
-				
 				NullWarning.showMessageDialog(idfield, "아이디를 입력하셔야죠 ^^;", "앗!", JOptionPane.NO_OPTION, infoIcon);
 			}
 			if(!userDao.idDuplicationCheckDao(idfield.getText())){

@@ -110,7 +110,7 @@ public class UserDAO {
 	// 비밀번호찾기
 	public String findPw(String id, String phoneNum) {
 		System.out.println("findPW()");
-		String pw_result = null;
+		String pw_result = "";
 		Connection conn = null;
 
 		PreparedStatement stmt = null;
@@ -122,7 +122,6 @@ public class UserDAO {
 			stmt.setString(2, phoneNum);
 			rst = stmt.executeQuery();
 
-			// 로그인 정보는 1개만 리턴하므로 while문이 필요없음
 			if (rst.next()) {
 				pw_result = rst.getString(1);
 				System.out.println(pw_result);
@@ -139,10 +138,9 @@ public class UserDAO {
 
 	// 아이디 찾기
 	public String findId(String name, String phoneNum) {
-		System.out.println("findPW()");
-		String pw_result = null;
+		System.out.println("findId()");
+		String id_result = "";
 		Connection conn = null;
-
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		try {
@@ -151,11 +149,10 @@ public class UserDAO {
 			stmt.setString(1, name);
 			stmt.setString(2, phoneNum);
 			rst = stmt.executeQuery();
-
-			// 로그인 정보는 1개만 리턴하므로 while문이 필요없음
+			
+			System.out.println("결과 " + rst);
 			if (rst.next()) {
-				pw_result = rst.getString(1);
-				System.out.println(pw_result);
+				id_result = rst.getString(1);
 			}
 
 		} catch (SQLException e) {
@@ -164,7 +161,7 @@ public class UserDAO {
 			JDBCUtil.close(rst, stmt, conn);
 		}
 
-		return pw_result;
+		return id_result;
 	}
 	
 	//친구 추가시 회원 검색
