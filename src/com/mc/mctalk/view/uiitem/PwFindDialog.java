@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
@@ -33,9 +34,10 @@ public class PwFindDialog extends JDialog {
 	private findPwEmpty findPwEmp;
 	private findPwFailed fpf;
 	private showPw sp;
+	private JDialog thisDialog;
 
 	public PwFindDialog() {
-
+		this.thisDialog = this;
 		Dimension frameSize = this.getSize();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation((screenSize.width - frameSize.width - 300) / 2,
@@ -43,31 +45,32 @@ public class PwFindDialog extends JDialog {
 
 		setLayout(null);
 
-		title.setBounds(90, 15, 100, 20);
+		title.setBounds(85, 15, 100, 20);
 		title.setForeground(Color.WHITE);
 		add(title);
 		inputId.setBorder(BorderFactory.createEmptyBorder());
 		PromptSupport.setPrompt("계정", inputId);
-		inputId.setBounds(50, 40, 150, 20);
+		inputId.setBounds(45, 40, 150, 20);
 		add(inputId);
 
 		inputPhoneNum.setBorder(BorderFactory.createEmptyBorder());
 		PromptSupport.setPrompt("폰번호", inputPhoneNum);
-		inputPhoneNum.setBounds(50, 75, 150, 20);
+		inputPhoneNum.setBounds(45, 75, 150, 20);
 		add(inputPhoneNum);
 
 		checkBtn.setContentAreaFilled(false);
 		checkBtn.setForeground(Color.WHITE);
 		checkBtn.setFont(font);
 		checkBtn.setBorder(btnBorder);
-		checkBtn.setBounds(50, 110, 70, 30);
+		checkBtn.setBounds(45, 110, 70, 30);
+		checkBtn.addActionListener(new pwFindListener());
 		add(checkBtn);
 
 		cancelBtn.setContentAreaFilled(false);
 		cancelBtn.setForeground(Color.WHITE);
 		cancelBtn.setFont(font);
 		cancelBtn.setBorder(btnBorder);
-		cancelBtn.setBounds(130, 110, 70, 30);
+		cancelBtn.setBounds(125, 110, 70, 30);
 		add(cancelBtn);
 
 		cancelBtn.addActionListener(new ActionListener() {
@@ -95,33 +98,31 @@ public class PwFindDialog extends JDialog {
 	}
 
 	class pwFindListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
-			if (e.getSource() == checkBtn);
-			String ID = inputId.getText();
-			System.out.println(ID);
+			String id = inputId.getText();
 			String phoneNum = inputPhoneNum.getText();
-			System.out.println(phoneNum);
-
-			if (ID == null || phoneNum == null) {
-				findPwEmp = new findPwEmpty(e.getActionCommand() + "입력이 안 되었습니다");
-			} else {
-				UserDAO ud = new UserDAO();
-				String jdb;
-				jdb = ud.findPw(ID, phoneNum);
-				if (jdb == null) {
-					fpf = new findPwFailed(e.getActionCommand() + "ID와 PW재확인");
+			JOptionPane jop = new JOptionPane();
+			if (e.getSource() == checkBtn){
+				if (id.equals("") || phoneNum.equals("")) {
+					jop.showMessageDialog(thisDialog, "모든 항목을 입력해 주세요", "확인", JOptionPane.WARNING_MESSAGE);
 				} else {
-					sp = new showPw(e.getActionCommand() + jdb);
-					System.out.println(jdb);
-					dispose();
+					UserDAO ud = new UserDAO();
+					String findResult = ud.findPw(id, phoneNum);
+//					System.out.println(findResult);
+					if (findResult.equals("") || findResult == null) {
+						jop.showMessageDialog(thisDialog, "일치하는 회원 정보가 없습니다", "확인", JOptionPane.WARNING_MESSAGE);
+					} else {
+						jop.showMessageDialog(thisDialog, "비밀번호 : " + findResult, "확인", JOptionPane.WARNING_MESSAGE);
+//						si = new showId(e.getActionCommand() + findResult);
+//						System.out.println(findResult);
+//						dispose();
+					}
 				}
 			}
 		}
 	}
-
+	
 	class findPwEmpty extends JDialog {
 
 		JLabel message = new JLabel("");
