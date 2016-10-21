@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.border.*;
@@ -37,25 +38,19 @@ import com.mc.mctalk.chatserver.ChattingClient;
 import com.mc.mctalk.dao.UserDAO;
 import com.mc.mctalk.view.uiitem.CustomJScrollPane;
 import com.mc.mctalk.view.uiitem.CustomTitlebar;
+import com.mc.mctalk.view.uiitem.LogoManager;
 import com.mc.mctalk.view.uiitem.RoundedImageMaker;
 import com.mc.mctalk.view.uiitem.SearchPanel;
 import com.mc.mctalk.vo.UserVO;
 
 /*
  * 담당자 : 정대용
- * 구현 기능 : 1) 친구 추가 Frame
- * 				2) 친구 검색 기능(id, 이름) - 이미 추가된 친구가 검색되어선 안됨.
- * 				3) 친구 추가 기능
- * 				*) 가능하다면, 프레임이 나타나는 위치가 메인 프레임 중간에 나타나게끔 됐음 좋겠어요.
- * 				*) 또, 뒷 배경이 불투명한 약간 어두운색이 되고 컨트롤이 안되게끔.( 카톡 PC버젼의 친구 추가 기능 참고..)
- * 참고 사항 : 1) 검색창 UI 패널은 기 구현된게 있으니 활용하기 바람.(SearchPanel.java)
- * 				2) 친구 추가 후 해당 frame을 닫을 경우 친구 리스트를 refresh 해야 함.(추후 협의)
- * 				3) 카톡 창 참고해서 깔끔하고 이쁘게 만들어 주세요~~^^ㅋㅋㅋ
- */
+*/
 
 public class FriendsAddFrame extends JFrame {
+	private JPanel pCover = new JPanel();
 	private JPanel firstPanel = new JPanel(); //윗 패널
-	private JLabel addLabel = new JLabel("검색할 이름을 입력하시오.");
+	private JLabel addLabel = new JLabel("이름을 검색하여 친구를 추가하세요");
 	private JTextField nameField = new JTextField();
 	private JButton searchBtn = new JButton("검색");
 
@@ -71,7 +66,6 @@ public class FriendsAddFrame extends JFrame {
 	private RoundedImageMaker imageMaker = new RoundedImageMaker();
 	private ChattingClient client;
 	
-	private SearchPanel sPanel;
 	private CustomTitlebar title;
 	private MainFrame mainFrame;
 	
@@ -81,43 +75,58 @@ public class FriendsAddFrame extends JFrame {
 		this.mainFrame = mainFrame;
 		initPanel();
 		setLayout(null);
-		
-		this.setLocation(600, 250);
+
+		Dimension frameSize = this.getSize();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation((screenSize.width - frameSize.width-300)/2, (screenSize.height - frameSize.height-300)/2);
+
+		pCover.setLayout(null);
+		pCover.setBorder(BorderFactory.createLineBorder(new Color(82, 134, 198)));
+		pCover.setBounds(0, 0, 300, 360);
+		new LogoManager().setLogoFrame(this);
 		this.setUndecorated(true);
 		title = new CustomTitlebar(this, client, false);
 		title.setBounds(0, 0, 300, 36);
-		add(title);
-		
+		pCover.add(title);
+
 		//상단 패널
+		addLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
 		firstPanel.add(addLabel);
-		firstPanel.add(nameField);
-		nameField.setPreferredSize(new Dimension(270, 30));
-		add(firstPanel);
-		firstPanel.setBounds(0, 36, 300, 64);
+		SearchPanel sPanel = new SearchPanel("이름검색");
+		JPanel searchPanel = sPanel.getpSearchInner();
+		
+		sPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+		nameField = sPanel.getTfSearch();
+		nameField.addKeyListener(new MemberSearchListener());
+		nameField.setPreferredSize(new Dimension(240, 25));
+		searchPanel.setPreferredSize(new Dimension(270, 30));
+		firstPanel.add(searchPanel);
+		pCover.add(firstPanel);
+		firstPanel.setBounds(1, 36, 298, 70);
 		firstPanel.setBackground(Color.WHITE);
 		
 		//가운데 패널에 넣을 검색 리스트, 스크롤 세팅
 		listScroll.setViewportView(searchList);
 		listScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		listScroll.setPreferredSize(new Dimension(270, 180));
 		searchList.setCellRenderer(new FriendsListCellRenderer());
 		searchList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		//가운데 패널
 		secondPanel.add(listScroll);
-		listScroll.setViewportView(searchList);
-		searchList.setPreferredSize(new Dimension(250, 600));
-		add(secondPanel);
-		secondPanel.setBounds(0, 100, 300, 200);
+		pCover.add(secondPanel);
+		secondPanel.setBounds(1, 105, 298, 200);
 		secondPanel.setBackground(Color.WHITE);
 		
 		//하단 패널
 		thirdPanel.add(addBtn);
 		addBtn.setPreferredSize(new Dimension(270, 30));
 		addBtn.addActionListener(new MemberAddListener());
-		add(thirdPanel);
-		thirdPanel.setBounds(0, 300, 300, 60);
+		pCover.add(thirdPanel);
+		thirdPanel.setBounds(1, 300, 298, 59);
 		thirdPanel.setBackground(Color.WHITE);
 		
+		this.add(pCover);
 		this.setTitle("친구 추가");
 		this.setSize(300, 360);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -126,17 +135,12 @@ public class FriendsAddFrame extends JFrame {
 	}
 	
 	public void initPanel(){
-//		this.setLayout(new BorderLayout());
-		sPanel = new SearchPanel("이름검색");
-		nameField = sPanel.getTfSearch();
-		nameField.addKeyListener(new MemberSearchListener());
-		
 		// JList에 데이터 담기
 		searchList = new JList(new DefaultListModel());
 		listModel = (DefaultListModel) searchList.getModel();
 		
 		listScroll = new CustomJScrollPane(searchList);
-		listScroll.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 0, new Color(230, 230, 230)));
+		listScroll.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(230, 230, 230)));
 	}
 	
 	//JList를 기존에 가져온 LinkedHashMap(순서보장) 데이터로 초기화
@@ -170,32 +174,6 @@ public class FriendsAddFrame extends JFrame {
 		}
 	}
 	
-	public void setNameField(JTextField nameField)
-	{
-		this.nameField = nameField;
-	}
-	public JTextField getNameField()
-	{
-		return nameField;
-	}
-	
-	public void setSearchList(JList searchList)
-	{
-		this.searchList = searchList;
-	}
-	public JList getSearchList()
-	{
-		return searchList;
-	}
-	
-	public void setMapFriends(Map<String, UserVO> mapFriends)
-	{
-		this.mapFriends = mapFriends;
-	}
-	public Map<String, UserVO> getMapFriends()
-	{
-		return mapFriends;
-	}
 	
 	public void searchEvent()
 	{
@@ -219,7 +197,6 @@ public class FriendsAddFrame extends JFrame {
 			{
 				case KeyEvent.VK_ENTER:
 					searchEvent();
-					
 			}
 		}
 
@@ -231,7 +208,6 @@ public class FriendsAddFrame extends JFrame {
 			{
 				case KeyEvent.VK_ENTER:
 					searchEvent();
-					
 			}
 		}
 
@@ -243,10 +219,8 @@ public class FriendsAddFrame extends JFrame {
 			{
 				case KeyEvent.VK_ENTER:
 					searchEvent();
-					
 			}
 		}
-		
 	}
 	
 	class MemberAddListener implements ActionListener
@@ -333,4 +307,32 @@ public class FriendsAddFrame extends JFrame {
 			return this;
 		}
 	}
+	
+	public void setNameField(JTextField nameField)
+	{
+		this.nameField = nameField;
+	}
+	public JTextField getNameField()
+	{
+		return nameField;
+	}
+	
+	public void setSearchList(JList searchList)
+	{
+		this.searchList = searchList;
+	}
+	public JList getSearchList()
+	{
+		return searchList;
+	}
+	
+	public void setMapFriends(Map<String, UserVO> mapFriends)
+	{
+		this.mapFriends = mapFriends;
+	}
+	public Map<String, UserVO> getMapFriends()
+	{
+		return mapFriends;
+	}
+	
 }

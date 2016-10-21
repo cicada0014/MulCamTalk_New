@@ -15,13 +15,6 @@ import org.jdesktop.swingx.prompt.PromptSupport;
 
 public class SearchPanel extends JPanel{
 	private JPanel pSearchInner, pSearchOuter;
-	public JPanel getpSearchOuter() {
-		return pSearchOuter;
-	}
-
-	public void setpSearchOuter(JPanel pSearchOuter) {
-		this.pSearchOuter = pSearchOuter;
-	}
 	private JTextField tfSearch;
 	private JLabel jlSearch;
 	
@@ -33,9 +26,6 @@ public class SearchPanel extends JPanel{
 		pSearchInner.setBackground(Color.white);
 		pSearchInner.setBorder(BorderFactory.createLineBorder(Color.lightGray));
 
-		// 친구 검색 창 placeHolder 설정
-		// 앞 부분에 돋보기 모양 작은 이미지 박스 추가 필요
-		// placeholder 색 변경 및 PANEL 크기 조정 필요
 		tfSearch = new JTextField();
 		tfSearch.setPreferredSize(new Dimension(290, 15));
 		tfSearch.setBorder(BorderFactory.createEmptyBorder());
@@ -54,6 +44,14 @@ public class SearchPanel extends JPanel{
 	public void setTfSearch(JTextField tfSearch) {
 		this.tfSearch = tfSearch;
 	}
-	
-	
+	public JPanel getpSearchOuter() {
+		return pSearchOuter;
+	}
+	public void setpSearchOuter(JPanel pSearchOuter) {
+		this.pSearchOuter = pSearchOuter;
+	}
+
+	public JPanel getpSearchInner() {
+		return pSearchInner;
+	}
 }

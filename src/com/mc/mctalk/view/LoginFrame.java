@@ -41,7 +41,7 @@ public class LoginFrame extends JFrame {
 	private JButton findPWBtn = new JButton("비밀번호를 잊어버리셨나요?");
 	private JButton findIDBtn = new JButton("계정을 잊어버리셨나요?");
 	private JPanel allPanel = new JPanel();
-	private Font font = new Font("맑은 고딕", Font.PLAIN, 10);
+	private Font font = new Font("맑은 고딕", Font.PLAIN, 13);
 	private LineBorder btnBorder = new LineBorder(Color.WHITE);
 	private LoginEmpty loginEmp;
 	private LoginFailed lf;
@@ -73,12 +73,12 @@ public class LoginFrame extends JFrame {
 		String imgIdPath = "images/login_id.png";
 		ImageIcon originIdIcon = new ImageIcon(imgIdPath);
 		Image originIdImg = originIdIcon.getImage();
-		Image changeIdImg = originIdImg.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+		Image changeIdImg = originIdImg.getScaledInstance(23, 25, Image.SCALE_SMOOTH);
 		ImageIcon IdIcon = new ImageIcon(changeIdImg);
 		labelID.setIcon(IdIcon);
 		labelID.setOpaque(true);
 		labelID.setBackground(Color.WHITE);
-		labelID.setBounds(70, 260, 30, 30);
+		labelID.setBounds(73, 260, 30, 30);
 
 		String imgPwPath = "images/login_pw.png";
 		ImageIcon originPwIcon = new ImageIcon(imgPwPath);
@@ -88,42 +88,42 @@ public class LoginFrame extends JFrame {
 		labelPW.setIcon(PwIcon);
 		labelPW.setOpaque(true);
 		labelPW.setBackground(Color.WHITE);
-		labelPW.setBounds(70, 290, 30, 30);
+		labelPW.setBounds(73, 290, 30, 30);
 		add(labelID);
 		add(labelPW);
 
 		loginID.setBorder(BorderFactory.createEmptyBorder());
-		loginID.setBounds(100, 260, 200, 30);
+		loginID.setBounds(103, 260, 199, 30);
 		PromptSupport.setPrompt("계정", loginID);
 		add(loginID);
 		loginPW.setBorder(BorderFactory.createEmptyBorder());
-		loginPW.setBounds(100, 290, 200, 30);
+		loginPW.setBounds(103, 290, 199, 30);
 		PromptSupport.setPrompt("비밀번호", loginPW);
 		add(loginPW);
 
 		add(loginBtn);
-		loginBtn.setBounds(70, 350, 230, 35);
+		loginBtn.setBounds(73, 350, 230, 35);
 		loginBtn.addActionListener(new ButtonActionListener());
 		loginBtn.setBackground(new Color(104, 192, 152));
 		loginBtn.setForeground(Color.WHITE);
-		loginBtn.setFont(font);
+		loginBtn.setFont(new Font("맑은 고딕", Font.BOLD, 13));
 		loginBtn.setBorder(BorderFactory.createEmptyBorder());
 
-		joinBtn.setBounds(90, 420, 200, 30);
+		joinBtn.setBounds(73, 420, 230, 30);
 		joinBtn.setContentAreaFilled(false);
 		joinBtn.setFont(font);
 		joinBtn.setForeground(Color.WHITE);
 		joinBtn.setBorder(btnBorder);
 		joinBtn.addActionListener(new JoinListener());
 		add(joinBtn);
-		findIDBtn.setBounds(90, 460, 200, 30);
+		findIDBtn.setBounds(73, 460, 230, 30);
 		findIDBtn.setContentAreaFilled(false);
 		findIDBtn.addActionListener(new IdFindListener());
 		findIDBtn.setFont(font);
 		findIDBtn.setForeground(Color.WHITE);
 		findIDBtn.setBorder(btnBorder);
 		add(findIDBtn);
-		findPWBtn.setBounds(90, 500, 200, 30);
+		findPWBtn.setBounds(73, 500, 230, 30);
 		findPWBtn.setContentAreaFilled(false);
 		findPWBtn.addActionListener(new PwFindListener());
 		findPWBtn.setFont(font);
@@ -159,7 +159,7 @@ public class LoginFrame extends JFrame {
 					if (vo.getUserID() != null) {
 						System.out.println(vo.getUserID());
 						MainFrame mainFrame = new MainFrame(client);
-						dispose(); // 제대로 종료되게 변경 필요
+						dispose();
 					} else {
 						lf = new LoginFailed(e.getActionCommand() + "ID와 PW재확인");
 					}
@@ -180,34 +180,26 @@ public class LoginFrame extends JFrame {
 	}
 
 	class PwFindListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
-			if (e.getSource() == findPWBtn)
-				;
+			if (e.getSource() == findPWBtn);
 			PwFindDialog pf = new PwFindDialog();
-
 		}
-
 	}
 
 	class IdFindListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == findIDBtn) {
 				IdFindDialog idf = new IdFindDialog();
 			}
 		}
-
 	}
 
 	class LoginEmpty extends JDialog {
 		JLabel message = new JLabel("");
 
 		public LoginEmpty(String str) {
-
 			getContentPane().add(message);
 			message.setText(str.toString());
 
@@ -220,9 +212,7 @@ public class LoginFrame extends JFrame {
 
 	class LoginFailed extends JDialog {
 		JLabel message = new JLabel("");
-
 		public LoginFailed(String str) {
-
 			getContentPane().add(message);
 			message.setText(str.toString());
 

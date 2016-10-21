@@ -108,7 +108,8 @@ public class FriendsListPanel extends JPanel {
 		jlFriendsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jlFriendsList.addMouseListener(selectionListener);
 		
-		scrollPane = new CustomJScrollPane(jlFriendsList);
+		scrollPane = new CustomJScrollPane(jlFriendsList,scrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,scrollPane.HORIZONTAL_SCROLLBAR_NEVER, true);
+
 		scrollPane.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 0, new Color(230, 230, 230)));
 
 		this.add(pSearch, "North");
@@ -137,6 +138,7 @@ public class FriendsListPanel extends JPanel {
 				//선택된 친구ID와 로그인 ID를 매개변수로 컨트롤러 호출
 				UserVO vo = (UserVO)jlFriendsList.getSelectedValue();
 				new ChattingController(client, vo);
+				client.getHtMainFrame(client.getLoginUserVO().getUserID()).changePanel("friendsList");
 			}
 		}
 		public void mouseReleased(MouseEvent arg0) {}
@@ -273,6 +275,8 @@ public class FriendsListPanel extends JPanel {
 			lbName.setText(vo.getUserName());
 			if(vo.getUserMsg() != null ){
 				lbStatMsg.setText(vo.getUserMsg());
+			}else{
+				lbStatMsg.setText(null);
 			}
 			
 			//투명도 설정

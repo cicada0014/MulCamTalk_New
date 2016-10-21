@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -39,6 +40,7 @@ import com.mc.mctalk.chatserver.ChattingClient;
 import com.mc.mctalk.chatserver.ChattingController;
 import com.mc.mctalk.view.uiitem.CustomJScrollPane;
 import com.mc.mctalk.view.uiitem.CustomTitlebar;
+import com.mc.mctalk.view.uiitem.LogoManager;
 import com.mc.mctalk.view.uiitem.RoundedImageMaker;
 import com.mc.mctalk.vo.UserVO;
 
@@ -63,7 +65,7 @@ public class CreatingChattingRoomPanel extends JFrame {
 	private JLabel topCountLabel = new JLabel("" + count);
 	private JPanel titlepanel = new JPanel();
 	private static int count = 0;
-	private Color backGraundColor = new Color(255, 255, 255);
+	private Color backGroundColor = new Color(255, 255, 255);
 	private Color selectedColor1 = new Color(64, 224, 208); // 아름다운 푸른색 찾아보기.
 	private Font grayFont = new Font("dialog", Font.BOLD, 12);
 	private ChattingClient client;
@@ -74,8 +76,13 @@ public class CreatingChattingRoomPanel extends JFrame {
 		this.mainFrame = mainFrame;
 		friendListPannel = new FriendsListPanel(true, client);
 		// frame setting
-		this.setBackground(backGraundColor);
+		new LogoManager().setLogoFrame(this);
+		this.setBackground(backGroundColor);
 		this.setSize(520, 430);
+		Dimension frameSize = this.getSize();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation((screenSize.width - frameSize.width)/2, (screenSize.height - frameSize.height)/2);
+		
 		this.setUndecorated(true);
 		CustomTitlebar titleBar = new CustomTitlebar(this, client, false);
 		titleBar.setPreferredSize(new Dimension(520, 35));
@@ -83,22 +90,22 @@ public class CreatingChattingRoomPanel extends JFrame {
 		entirePanel.setLayout(new BoxLayout(entirePanel, BoxLayout.Y_AXIS));
 		titlepanel.setLayout(new BorderLayout());
 		titlepanel.add(titleBar, BorderLayout.NORTH);
-		titlepanel.setBackground(backGraundColor);
+		titlepanel.setBackground(backGroundColor);
 		entirePanel.add(titlepanel);
 		entirePanel.add(panelAdd);
 		entirePanel.add(middlePanel);
 		entirePanel.add(bottomPanel);
-		middlePanel.setBackground(backGraundColor);
+		middlePanel.setBackground(backGroundColor);
 		middlePanel.setPreferredSize(new Dimension(520, 300));
-		bottomPanel.setBackground(backGraundColor);
-		middleSelectedFriendListPanel.setBackground(backGraundColor);
+		bottomPanel.setBackground(backGroundColor);
+		middleSelectedFriendListPanel.setBackground(backGroundColor);
 		// topPanel setting
-		panelAdd.setBackground(backGraundColor);
+		panelAdd.setBackground(backGroundColor);
 		this.add(entirePanel);
 		
 		panelAdd.add(topPanelLabel);
 		panelAdd.add(topCountLabel);
-		closeBtn.setBackground(backGraundColor);
+		closeBtn.setBackground(backGroundColor);
 		topPanelLabel.setFont(grayFont);
 		topPanelLabel.setText("초대하기");
 		topCountLabel.setText("" + count);
@@ -107,8 +114,8 @@ public class CreatingChattingRoomPanel extends JFrame {
 		middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.X_AXIS));
 		friendListPannel.setPreferredSize(new Dimension(250, 200));
 		friendListPannel.getTfSearch().setPreferredSize(new Dimension(230, 15));
-		friendListPannel.getpSearch().setBackground(backGraundColor);
-		friendListPannel.getTfSearch().setBackground(backGraundColor);
+		friendListPannel.getpSearch().setBackground(backGroundColor);
+		friendListPannel.getTfSearch().setBackground(backGroundColor);
 		middlePanel.add(friendListPannel);
 		// middlePanel.add(middleChoiceFriendListScrollPanel);
 		middleSelectedFriendListPanel.setPreferredSize(new Dimension(220, 200));
@@ -126,7 +133,7 @@ public class CreatingChattingRoomPanel extends JFrame {
 			}
 			public void mouseClicked(MouseEvent e) {
 				// 오른쪽 선택된 리스트 선택시 왼쪽 리스트 선택 해제. 
-				System.out.println(selectedList.getSelectedValue().getSelectedIndex());
+//				System.out.println(selectedList.getSelectedValue().getSelectedIndex());
 				friendListPannel.getJlFriendsList().getSelectionModel().removeSelectionInterval(
 						selectedList.getSelectedValue().getSelectedIndex(), selectedList.getSelectedValue().getSelectedIndex());
 				listmodel.remove(selectedList.getSelectedIndex());// 오른쪽 선택 값 삭제 
@@ -138,7 +145,7 @@ public class CreatingChattingRoomPanel extends JFrame {
 		ChoiceFriendListScrollPanel.setBorder(null);
 		ChoiceFriendListScrollPanel.setPreferredSize(new Dimension(220, 200));
 		middlePanel.add(ChoiceFriendListScrollPanel);
-		friendListPannel.getpSearch().getpSearchOuter().setBackground(backGraundColor);
+		friendListPannel.getpSearch().getpSearchOuter().setBackground(backGroundColor);
 		friendListPannel.getJlFriendsList().addMouseListener(new MouseListener() {
 			public void mouseReleased(MouseEvent e) {
 			}
@@ -215,7 +222,7 @@ public class CreatingChattingRoomPanel extends JFrame {
 			// Border border = this.getBorder();
 			Border margin = new EmptyBorder(5, 20, 5, 20);
 
-			LineBorder roundedborder = new LineBorder(backGraundColor, 7, true);
+			LineBorder roundedborder = new LineBorder(backGroundColor, 7, true);
 
 			// lbCloseBtn.setForeground(selectedColor1);
 			lbCloseBtn.setPreferredSize(new Dimension(48, 45));
@@ -275,14 +282,14 @@ public class CreatingChattingRoomPanel extends JFrame {
 				lbStatMsg.setBackground(selectedColor1);
 				panelText.setBackground(selectedColor1);
 				lbCloseBtn.setBackground(selectedColor1);
-				setBackground(backGraundColor);
+				setBackground(backGroundColor);
 			} else {
 				// lbImgIcon.setBackground(selectedColor1);
-				lbName.setForeground(backGraundColor);
+				lbName.setForeground(backGroundColor);
 				lbStatMsg.setBackground(selectedColor1);
-				panelText.setForeground(backGraundColor);
+				panelText.setForeground(backGroundColor);
 				lbCloseBtn.setBackground(selectedColor1);
-				setBackground(backGraundColor);
+				setBackground(backGroundColor);
 			}
 			return this;
 		}
