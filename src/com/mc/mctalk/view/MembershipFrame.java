@@ -95,6 +95,8 @@ public class MembershipFrame extends JFrame {
 	private JPanel titlepanel = new JPanel();
 	private ImageIcon infoIcon = new ImageIcon("images/info.png");
 	private CustomTitlebar titleBar = new CustomTitlebar(this, null, false);
+	private JPanel phonePanel = new JPanel();
+	private JTextField inputPhoneNumField = new JTextField();
 	// 프레임 생성자
 	public MembershipFrame() {
 		// frame setting
@@ -107,6 +109,7 @@ public class MembershipFrame extends JFrame {
 		panels.add(passwordCheckPanel);
 		panels.add(overlapCheckPanel);
 		panels.add(nameCheckBoxPanel);
+		panels.add(phonePanel);
 		panels.add(birthPanel);
 		panels.add(joinbtnPanel);
 		this.setTitle("membership");
@@ -170,7 +173,7 @@ public class MembershipFrame extends JFrame {
 		// error check panel setting (5panel)
 		overlapCheckPanel.add(errorCheck);
 		errorCheck.setBorder(BorderFactory.createEmptyBorder(0, 0, 3, 0));
-		overlapCheckPanel.setSize(380, 20);
+		overlapCheckPanel.setSize(380, 15);
 		overlapCheckPanel.setPreferredSize(overlapCheckPanel.getSize());
 		// name and checkbox panel setting(6panel)
 		nameTextfield.setFont(grayFont);
@@ -187,6 +190,17 @@ public class MembershipFrame extends JFrame {
 		checkBoxWoman.setBackground(backGroundColor);
 		checkBoxMan.addActionListener(checkManSex);
 		checkBoxWoman.addActionListener(checkWomanSex);
+		//phone panel setting
+		phonePanel.add(inputPhoneNumField);
+		phonePanel.setSize(380, 25);
+		phonePanel.setPreferredSize(phonePanel.getSize());
+		inputPhoneNumField.setFont(grayFont);
+		inputPhoneNumField.setBorder(fieldBorder);
+		inputPhoneNumField.setSize(fieldSize);
+		inputPhoneNumField.setPreferredSize(inputPhoneNumField.getSize());
+		PromptSupport.setPrompt("전화번호", inputPhoneNumField);
+		
+		
 		// birth panel setting (7panel)
 		String[] months = new String[13];
 		for (int i = 0; i < months.length; i++) {
@@ -307,6 +321,9 @@ public class MembershipFrame extends JFrame {
 			else if (checkSexReuslt == 2) {
 				NullWarning.showMessageDialog(idfield, "성별 입력 확인하세요!", "앗!", JOptionPane.NO_OPTION, infoIcon);
 			}
+			else if (inputPhoneNumField.equals("")) {
+				NullWarning.showMessageDialog(idfield, "전화번호 입력하세요!", "앗!", JOptionPane.NO_OPTION, infoIcon);
+			}
 			else if (monthCombo.getSelectedIndex() == 0) {
 				NullWarning.showMessageDialog(idfield, "날짜 입력 확인하세요!", "앗!", JOptionPane.NO_OPTION, infoIcon);
 			}
@@ -318,8 +335,13 @@ public class MembershipFrame extends JFrame {
 			if (!idfield.getText().equals("") && !passwordfield.getText().equals("")
 					&& !nameTextfield.getText().equals("") && !(checkSexReuslt == 2)
 					&& !(monthCombo.getSelectedIndex() == 0) && !(dayCombo.getSelectedIndex() == 0)) {
-				UserVO vo = new UserVO(idfield.getText(), passwordfield.getText(), nameTextfield.getText(),
-						checkSexReuslt, monthCombo.getSelectedIndex(), dayCombo.getSelectedIndex());
+				UserVO vo = new UserVO();
+				vo.setUserID(idfield.getText());
+				vo.setUserPassword(passwordfield.getText());
+				vo.setUserName(nameTextfield.getText());
+				vo.setUserSex(checkSexReuslt);
+				vo.setUserBirth(monthCombo.getSelectedIndex()+" /"+dayCombo.getSelectedIndex());
+				vo.setUserPhone(inputPhoneNumField.getText());
 				memberInfos.put(idfield.getText(), vo);
 
 				UserDAO memberDAO = new UserDAO();
