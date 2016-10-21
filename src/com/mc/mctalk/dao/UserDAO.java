@@ -28,7 +28,7 @@ public class UserDAO {
 												  + "WHERE user_id NOT IN (SELECT rel_user_id from user_relation WHERE user_id = ?) "
 												  + "and user_id != ? "
 												  + "and user_name like ? ";
-	private String memberAddSQL = "INSERT into user_relation (user_id,rel_user_id) values(?,?) ";
+	private String memberAddSQL = "INSERT into user_relation (user_id,rel_user_id,rel_added_date) values(?,?,now()) ";
 	private String idDuplicationCheckSQL = "SELECT user_id FROM users WHERE user_id=?";
 	
 	// 회원가입
