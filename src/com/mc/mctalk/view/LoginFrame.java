@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -45,8 +46,10 @@ public class LoginFrame extends JFrame {
 	private LineBorder btnBorder = new LineBorder(Color.WHITE);
 	private LoginEmpty loginEmp;
 	private LoginFailed lf;
+	private JFrame thisFrame;
 
 	public LoginFrame() {
+		this.thisFrame = this;
 		setLayout(null);
 		new LogoManager().setLogoFrame(this);
 
@@ -146,22 +149,26 @@ public class LoginFrame extends JFrame {
 	public class ButtonActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			JOptionPane jop = new JOptionPane();
+
 			if (e.getSource() == loginBtn) { // 로그인 버튼이 눌리면,
 				UserDAO dao = new UserDAO();
 				// DB 로그인
 				String id = loginID.getText();
 				String pw = loginPW.getText();
-				ChattingClient client = dao.loginMember(id, pw);
-				UserVO vo = client.getLoginUserVO();
-				if (id == null || pw == null) {
-					loginEmp = new LoginEmpty(e.getActionCommand() + "입력이 안 되었습니다");
+
+				if (id.equals("") || pw.equals("")) {
+					jop.showMessageDialog(thisFrame, "로그인 정보를 입력해 주세요", "확인", JOptionPane.WARNING_MESSAGE);
 				} else {
-					if (vo.getUserID() != null) {
+					ChattingClient client = dao.loginMember(id, pw);
+					if (client != null) {
+						UserVO vo = client.getLoginUserVO();
 						System.out.println(vo.getUserID());
 						MainFrame mainFrame = new MainFrame(client);
 						dispose();
 					} else {
-						lf = new LoginFailed(e.getActionCommand() + "ID와 PW재확인");
+						jop.showMessageDialog(thisFrame, "로그인 정보를 확인해 주세요", "확인", JOptionPane.WARNING_MESSAGE);
+//						lf = new LoginFailed(e.getActionCommand() + "ID와 PW재확인");
 					}
 				}
 			}

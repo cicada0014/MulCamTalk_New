@@ -66,7 +66,6 @@ public class UserDAO {
 	// 로그인
 	public ChattingClient loginMember(String id, String pw) {
 		System.out.println(TAG + "loginMember()");
-		String id_result = null;
 
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -94,7 +93,7 @@ public class UserDAO {
 				vo.setUserImgPath(rst.getString(10));
 			}
 
-			if (vo != null) {
+			if (vo.getUserID() != null) {
 				System.out.println("Login User Info : " + vo.toString());
 				client = new ChattingClient(vo);
 			}
