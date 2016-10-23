@@ -23,8 +23,8 @@ import com.mc.mctalk.vo.UserVO;
 public class ChattingClient {
 	private String TAG = "ChattingClient : ";
 	private Socket socket = null;
-//	final private String SERVER_IP= "127.0.0.1";
-	final private String SERVER_IP= "70.12.109.103";
+	final private String SERVER_IP= "127.0.0.1";
+//	final private String SERVER_IP= "70.12.109.103";
 	final private int SERVER_PORT= 8888;
 
 	private BufferedWriter bw = null;
